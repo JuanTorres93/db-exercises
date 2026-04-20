@@ -2,8 +2,6 @@ import { DomainDate } from "@/domain/value-objects/DomainDate/DomainDate";
 import { Id } from "@/domain/value-objects/Id/Id";
 import { Text, TextOptions } from "@/domain/value-objects/Text/Text";
 
-// TODO NEXT IMPORTANT CREATE DTO
-
 export type ExerciseCreateProps = {
   id: string;
   name: string;
