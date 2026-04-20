@@ -1,20 +1,21 @@
-import { DomainDate } from '@/value-objects/DomainDate/DomainDate';
-import { ValidationError } from '../../common/errors';
+import { DomainDate } from "@/value-objects/DomainDate/DomainDate";
+import { Id } from "@/value-objects/Id/Id";
+import { Text, TextOptions } from "@/value-objects/Text/Text";
 
-// TODO IMPORTANT CREATE DTO
+// TODO NEXT IMPORTANT CREATE DTO
 
 export type ExerciseCreateProps = {
   id: string;
   name: string;
-  // More props
-  createdAt: Date;
-  updatedAt: Date;
+  userId?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 export type ExerciseProps = {
-  id: string; // TODO change to Value Object
-  name: string; // TODO change to Value Object
-  // More props
+  id: Id;
+  name: Text;
+  userId?: Id;
   createdAt: DomainDate;
   updatedAt: DomainDate;
 };
@@ -23,26 +24,33 @@ export class Exercise {
   private constructor(private readonly props: ExerciseProps) {}
 
   static create(props: ExerciseCreateProps): Exercise {
-    // Validation
-
     const entityProps: ExerciseProps = {
-      // TODO more props validated with Value Objects
+      id: Id.create(props.id),
+      name: Text.create(props.name, nameTextOptions),
       createdAt: DomainDate.create(props.createdAt),
       updatedAt: DomainDate.create(props.updatedAt),
+      userId: props.userId ? Id.create(props.userId) : undefined,
     };
 
     return new Exercise(entityProps);
   }
 
-  // Getters
+  rename(newName: string) {
+    this.props.name = Text.create(newName, nameTextOptions);
+
+    this.props.updatedAt = DomainDate.create(new Date());
+  }
+
   get id() {
-    // TODO include .value when changing to Value Object
-    return this.props.id;
+    return this.props.id.value;
+  }
+
+  get userId() {
+    return this.props.userId?.value;
   }
 
   get name() {
-    // TODO include .value when changing to Value Object
-    return this.props.name;
+    return this.props.name.value;
   }
 
   get createdAt() {
@@ -52,4 +60,19 @@ export class Exercise {
   get updatedAt() {
     return this.props.updatedAt.value;
   }
+
+  toCreateProps(): ExerciseCreateProps {
+    return {
+      id: this.id,
+      name: this.name,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      userId: this.userId,
+    };
+  }
 }
+
+export const nameTextOptions: TextOptions = {
+  maxLength: 100,
+  canBeEmpty: false,
+};

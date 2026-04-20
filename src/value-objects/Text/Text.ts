@@ -5,7 +5,7 @@ type TextProps = {
   value: string;
 };
 
-type TextOptions = {
+export type TextOptions = {
   maxLength?: number;
   canBeEmpty?: boolean;
 };
