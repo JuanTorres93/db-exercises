@@ -1,6 +1,6 @@
-import { DomainDate } from "@/value-objects/DomainDate/DomainDate";
-import { Id } from "@/value-objects/Id/Id";
-import { Text, TextOptions } from "@/value-objects/Text/Text";
+import { DomainDate } from "@/domain/value-objects/DomainDate/DomainDate";
+import { Id } from "@/domain/value-objects/Id/Id";
+import { Text, TextOptions } from "@/domain/value-objects/Text/Text";
 
 // TODO NEXT IMPORTANT CREATE DTO
 
