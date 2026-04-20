@@ -5,7 +5,7 @@ export interface ExercisesRepo {
   getByUserId(userId: string): Promise<Exercise[]>;
   getByFuzzyName(name: string): Promise<Exercise[]>;
 
-  save(exercise: Exercise): Promise<void>;
+  save(exercise: Exercise): Promise<Exercise>;
 
-  deleteById(id: string): Promise<void>;
+  deleteById(id: string): Promise<Exercise>;
 }
