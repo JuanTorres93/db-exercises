@@ -61,8 +61,8 @@ describe("MemoryExercisesRepo", () => {
     });
   });
 
-  describe("getByFuzzyName", () => {
-    it("returns exercises matching a fuzzy name (case-insensitive)", async () => {
+  describe("getCommonExerciseByFuzzyName", () => {
+    it("returns exercises matching a fuzzy name", async () => {
       const otherExercise = createTestExercise({
         id: "other-exercise-id",
         name: "Push Up",
@@ -75,11 +75,33 @@ describe("MemoryExercisesRepo", () => {
       await repo.save(otherExercise);
       await repo.save(anotherDifferentExercise);
 
-      const foundExercises = await repo.getByFuzzyName("push");
+      const foundExercises = await repo.getCommonExercisesByFuzzyName("push");
 
       expect(foundExercises.map((exercise) => exercise.id)).toEqual([
         "other-exercise-id",
       ]);
+    });
+
+    it("returns an empty array when no exercises match", async () => {
+      const foundExercises =
+        await repo.getCommonExercisesByFuzzyName("non-existent-name");
+
+      expect(foundExercises).toEqual([]);
+    });
+
+    it("does not return user specific exercises", async () => {
+      const userExercise = createTestExercise({
+        id: "user-exercise-id",
+        name: "User Exercise",
+        userId: "user-1",
+      });
+
+      await repo.save(userExercise);
+
+      const foundExercises =
+        await repo.getCommonExercisesByFuzzyName("user exercise");
+
+      expect(foundExercises).toEqual([]);
     });
   });
 

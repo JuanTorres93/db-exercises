@@ -16,13 +16,14 @@ export class MemoryExercisesRepo implements ExercisesRepo {
     return exercises.filter((exercise) => exercise.userId === userId);
   }
 
-  async getByFuzzyName(name: string): Promise<Exercise[]> {
+  async getCommonExercisesByFuzzyName(name: string): Promise<Exercise[]> {
     const processedName = name.toLowerCase();
 
     const exercises = Array.from(this.exercises.values());
 
-    return exercises.filter((exercise) =>
-      exercise.name.toLowerCase().includes(processedName),
+    return exercises.filter(
+      (exercise) =>
+        !exercise.userId && exercise.name.toLowerCase().includes(processedName),
     );
   }
 
