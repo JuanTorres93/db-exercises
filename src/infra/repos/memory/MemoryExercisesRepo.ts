@@ -57,6 +57,21 @@ export class MemoryExercisesRepo implements ExercisesRepo {
     return foundExercise ?? null;
   }
 
+  async getByFuzzyNameAndUserId(
+    name: string,
+    userId: string,
+  ): Promise<Exercise[]> {
+    const processedName = name.toLowerCase();
+
+    const exercises = Array.from(this.exercises.values());
+
+    return exercises.filter(
+      (exercise) =>
+        (userId ? exercise.userId === userId : !exercise.userId) &&
+        exercise.name.toLowerCase().includes(processedName),
+    );
+  }
+
   async save(exercise: Exercise): Promise<Exercise> {
     this.exercises.set(exercise.id, exercise);
 
