@@ -14,12 +14,16 @@
   "type": "commonjs",
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
+    "@types/mongodb-memory-server": "^1.8.0",
     "@types/node": "^25.6.0",
     "@types/uuid": "^10.0.0",
     "husky": "^9.1.7",
+    "mongodb-memory-server": "^11.0.1",
     "vitest": "^4.1.4"
   },
   "dependencies": {
+    "@types/mongoose": "^5.11.96",
+    "mongoose": "^9.5.0",
     "uuid": "^14.0.0"
   }
 }
