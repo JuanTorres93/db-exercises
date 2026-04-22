@@ -111,6 +111,21 @@ describe("MemoryExercisesRepo", () => {
 
       expect(foundExercise).toBeNull();
     });
+
+    it("should return common exercises if userId is not provided", async () => {
+      const commonExercise = Exercise.create({
+        id: "common-exercise-id",
+        name: "Common Exercise",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      await repo.save(commonExercise);
+
+      const foundExercise = await repo.getByNameAndUserId("common exercise");
+
+      expect(foundExercise!.id).toBe("common-exercise-id");
+    });
   });
 
   describe("save", () => {

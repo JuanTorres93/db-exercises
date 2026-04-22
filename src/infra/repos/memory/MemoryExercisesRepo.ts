@@ -28,7 +28,7 @@ export class MemoryExercisesRepo implements ExercisesRepo {
 
   async getByNameAndUserId(
     name: string,
-    userId: string,
+    userId?: string,
   ): Promise<Exercise | null> {
     const processedName = name.toLowerCase();
 
@@ -36,7 +36,7 @@ export class MemoryExercisesRepo implements ExercisesRepo {
 
     const foundExercise = exercises.find(
       (exercise) =>
-        exercise.userId === userId &&
+        (userId ? exercise.userId === userId : !exercise.userId) &&
         exercise.name.toLowerCase() === processedName,
     );
 
