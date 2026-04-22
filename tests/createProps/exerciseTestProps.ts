@@ -1,11 +1,11 @@
 import {
   Exercise,
   ExerciseCreateProps,
-} from '../../src/domain/entities/exercise/Exercise';
+} from "../../src/domain/entities/exercise/Exercise";
 
 export const validExerciseProps = {
-  id: 'ex1',
-  name: 'Test Exercise',
+  id: "ex1",
+  name: "Test Exercise",
   createdAt: new Date(),
   updatedAt: new Date(),
 };
@@ -16,6 +16,7 @@ export function createTestExercise(
   return Exercise.create({
     id: props?.id || validExerciseProps.id,
     name: props?.name || validExerciseProps.name,
+    userId: props?.userId,
     createdAt: props?.createdAt || validExerciseProps.createdAt,
     updatedAt: props?.updatedAt || validExerciseProps.updatedAt,
   });

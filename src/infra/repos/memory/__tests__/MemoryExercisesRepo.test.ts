@@ -32,18 +32,15 @@ describe("MemoryExercisesRepo", () => {
 
   describe("getByUserId", () => {
     it("returns exercises that belong to a user", async () => {
-      const otherExercise = Exercise.create({
+      const otherExercise = createTestExercise({
         id: "other-exercise-id",
         name: "Ex 2",
-        createdAt: new Date(),
-        updatedAt: new Date(),
         userId: "user-1",
       });
-      const anotherDifferentExercise = Exercise.create({
+
+      const anotherDifferentExercise = createTestExercise({
         id: "ex3",
         name: "Ex 3",
-        createdAt: new Date(),
-        updatedAt: new Date(),
         userId: "user-2",
       });
 
@@ -86,13 +83,55 @@ describe("MemoryExercisesRepo", () => {
     });
   });
 
+  describe("getCommonExerciseByName", () => {
+    it("returns common exercise matching a name ", async () => {
+      const commonExercise = createTestExercise({
+        id: "common-exercise-id",
+        name: "Common Exercise",
+      });
+
+      const userExercise = createTestExercise({
+        id: "user-exercise-id",
+        name: "Common Exercise",
+        userId: "user-1",
+      });
+
+      await repo.save(commonExercise);
+      await repo.save(userExercise);
+
+      const foundExercise =
+        await repo.getCommonExerciseByName("common exercise");
+
+      expect(foundExercise!.id).toBe("common-exercise-id");
+    });
+
+    it("returns null when no common exercises match", async () => {
+      const foundExercise =
+        await repo.getCommonExerciseByName("non-existent-name");
+
+      expect(foundExercise).toBeNull();
+    });
+
+    it("should not return user exercises even if name matches", async () => {
+      const userExercise = createTestExercise({
+        id: "user-exercise-id",
+        name: "User Exercise",
+        userId: "user-1",
+      });
+
+      await repo.save(userExercise);
+
+      const foundExercise = await repo.getCommonExerciseByName("user exercise");
+
+      expect(foundExercise).toBeNull();
+    });
+  });
+
   describe("getByNameAndUserId", () => {
     it("returns the exercise matching name and userId (case-insensitive)", async () => {
-      const otherExercise = Exercise.create({
+      const otherExercise = createTestExercise({
         id: "other-exercise-id",
         name: "My Exercise",
-        createdAt: new Date(),
-        updatedAt: new Date(),
         userId: "user-1",
       });
 
@@ -113,11 +152,9 @@ describe("MemoryExercisesRepo", () => {
     });
 
     it("should return common exercises if userId is not provided", async () => {
-      const commonExercise = Exercise.create({
+      const commonExercise = createTestExercise({
         id: "common-exercise-id",
         name: "Common Exercise",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       });
 
       await repo.save(commonExercise);

@@ -5,20 +5,20 @@ import { Uuidv4IdGenerator } from "@/infra/services/Uuidv4IdGenerator/Uuidv4IdGe
 
 import { createTestExercise } from "../../../../../tests/createProps/exerciseTestProps";
 import { exerciseDTOProperties } from "../../../../../tests/dtoProperties/exerciseDtoProperties";
-import { AddExerciseUsecase } from "../AddExerciseUsecase";
+import { AddCommonExerciseUsecase } from "../AddCommonExerciseUsecase";
 
-describe("AddExerciseUsecase", () => {
+describe("AddCommonExerciseUsecase", () => {
   let exercisesRepo: MemoryExercisesRepo;
   let idGenerator: Uuidv4IdGenerator;
 
-  let usecase: AddExerciseUsecase;
+  let usecase: AddCommonExerciseUsecase;
   let exercise: Exercise;
 
   beforeEach(async () => {
     exercisesRepo = new MemoryExercisesRepo();
     idGenerator = new Uuidv4IdGenerator();
 
-    usecase = new AddExerciseUsecase(exercisesRepo, idGenerator);
+    usecase = new AddCommonExerciseUsecase(exercisesRepo, idGenerator);
 
     exercise = createTestExercise({
       userId: "a-user-id",
@@ -29,7 +29,6 @@ describe("AddExerciseUsecase", () => {
     it("should return ExerciseDTO", async () => {
       const result = await usecase.execute({
         name: exercise.name,
-        userId: exercise.userId,
       });
 
       expect(result).not.toBeInstanceOf(Exercise);
@@ -41,12 +40,10 @@ describe("AddExerciseUsecase", () => {
     it("should generate different ids for different exercises", async () => {
       const result1 = await usecase.execute({
         name: "One exercise name",
-        userId: exercise.userId,
       });
 
       const result2 = await usecase.execute({
         name: "Another exercise name",
-        userId: exercise.userId,
       });
 
       expect(result1.id).not.toBe(result2.id);
@@ -57,46 +54,18 @@ describe("AddExerciseUsecase", () => {
     it("should persist new exercise in the repository", async () => {
       const result = await usecase.execute({
         name: exercise.name,
-        userId: exercise.userId,
       });
 
       const foundExercise = await exercisesRepo.getById(result.id);
 
       expect(foundExercise).not.toBeNull();
       expect(foundExercise!.name).toBe(exercise.name);
-      expect(foundExercise!.userId).toBe(exercise.userId);
+      expect(foundExercise!.userId).toBeUndefined();
     });
   });
 
   describe("Errors", () => {
-    it("should throw error if name already exists for userId", async () => {
-      const userId = "another-user-id";
-
-      // Create exercise first
-      await usecase.execute({
-        name: exercise.name,
-        userId,
-      });
-
-      // Test for error
-      await expect(
-        usecase.execute({
-          name: exercise.name,
-          userId,
-        }),
-      ).rejects.toThrow(AlreadyExistsError);
-
-      await expect(
-        usecase.execute({
-          name: exercise.name,
-          userId,
-        }),
-      ).rejects.toThrow(
-        /AddExerciseUsecase: Exercise with name ".*" already exists for userId ".*"./,
-      );
-    });
-
-    it("should throw error if name already exists for common exercises (no user-id)", async () => {
+    it("should throw error if name already exists", async () => {
       // Create common exercise first
       await usecase.execute({
         name: exercise.name,
@@ -114,7 +83,7 @@ describe("AddExerciseUsecase", () => {
           name: exercise.name,
         }),
       ).rejects.toThrow(
-        /AddExerciseUsecase: Exercise with name ".*" already exists for userId "undefined"./,
+        /AddCommonExerciseUsecase: Exercise with name.*already exists/,
       );
     });
   });

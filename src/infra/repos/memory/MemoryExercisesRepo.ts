@@ -26,6 +26,19 @@ export class MemoryExercisesRepo implements ExercisesRepo {
     );
   }
 
+  async getCommonExerciseByName(name: string): Promise<Exercise | null> {
+    const processedName = name.toLowerCase();
+
+    const exercises = Array.from(this.exercises.values());
+
+    const foundExercise = exercises.find(
+      (exercise) =>
+        !exercise.userId && exercise.name.toLowerCase() === processedName,
+    );
+
+    return foundExercise ?? null;
+  }
+
   async getByNameAndUserId(
     name: string,
     userId?: string,
