@@ -1,17 +1,11 @@
-import { NotFoundError } from "@/domain/common/errors";
 import { Exercise } from "@/domain/entities/exercise/Exercise";
 import { ExercisesRepo } from "@/domain/repos/ExercisesRepo.port";
 
 export class MemoryExercisesRepo implements ExercisesRepo {
   private exercises: Map<string, Exercise> = new Map();
 
-  async getById(id: string): Promise<Exercise> {
-    const exercise = this.exercises.get(id);
-
-    if (!exercise)
-      throw new NotFoundError(
-        `MemoryExercisesRepo: Exercise with id ${id} not found`,
-      );
+  async getById(id: string): Promise<Exercise | null> {
+    const exercise = this.exercises.get(id) ?? null;
 
     return exercise;
   }
@@ -32,7 +26,10 @@ export class MemoryExercisesRepo implements ExercisesRepo {
     );
   }
 
-  async getByNameAndUserId(name: string, userId: string): Promise<Exercise> {
+  async getByNameAndUserId(
+    name: string,
+    userId: string,
+  ): Promise<Exercise | null> {
     const processedName = name.toLowerCase();
 
     const exercises = Array.from(this.exercises.values());
@@ -43,12 +40,7 @@ export class MemoryExercisesRepo implements ExercisesRepo {
         exercise.name.toLowerCase() === processedName,
     );
 
-    if (!foundExercise)
-      throw new NotFoundError(
-        `MemoryExercisesRepo: Exercise with name ${name} and userId ${userId} not found`,
-      );
-
-    return foundExercise;
+    return foundExercise ?? null;
   }
 
   async save(exercise: Exercise): Promise<Exercise> {
@@ -57,13 +49,10 @@ export class MemoryExercisesRepo implements ExercisesRepo {
     return exercise;
   }
 
-  async deleteById(id: string): Promise<Exercise> {
-    if (!this.exercises.has(id))
-      throw new NotFoundError(
-        `MemoryExercisesRepo: Exercise with id ${id} not found`,
-      );
+  async deleteById(id: string): Promise<Exercise | null> {
+    if (!this.exercises.has(id)) return null;
 
-    const exercise = this.exercises.get(id)!;
+    const exercise = this.exercises.get(id) ?? null;
 
     this.exercises.delete(id);
 

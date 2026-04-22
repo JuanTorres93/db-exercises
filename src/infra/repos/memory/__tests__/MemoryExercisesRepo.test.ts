@@ -1,4 +1,3 @@
-import { NotFoundError } from "@/domain/common/errors";
 import { Exercise } from "@/domain/entities/exercise/Exercise";
 
 import { createTestExercise } from "../../../../../tests/createProps/exerciseTestProps";
@@ -18,31 +17,29 @@ describe("MemoryExercisesRepo", () => {
 
   describe("getById", () => {
     it("returns the exercise when it exists", async () => {
-      const found = await repo.getById(exercise.id);
+      const foundExercise = await repo.getById(exercise.id);
 
-      expect(found).toBeInstanceOf(Exercise);
-      expect(found.id).toBe(exercise.id);
+      expect(foundExercise).toBeInstanceOf(Exercise);
+      expect(foundExercise!.id).toBe(exercise.id);
     });
 
-    it("throws NotFoundError when exercise does not exist", async () => {
-      await expect(repo.getById("no-such-id")).rejects.toThrow(NotFoundError);
+    it("should return null when exercise does not exist", async () => {
+      const foundExercise = await repo.getById("non-existent-id");
 
-      await expect(repo.getById("no-such-id")).rejects.toThrow(
-        /MemoryExercisesRepo:.*id.*not found/,
-      );
+      expect(foundExercise).toBeNull();
     });
   });
 
   describe("getByUserId", () => {
     it("returns exercises that belong to a user", async () => {
-      const ex2 = Exercise.create({
-        id: "ex2",
+      const otherExercise = Exercise.create({
+        id: "other-exercise-id",
         name: "Ex 2",
         createdAt: new Date(),
         updatedAt: new Date(),
         userId: "user-1",
       });
-      const ex3 = Exercise.create({
+      const anotherDifferentExercise = Exercise.create({
         id: "ex3",
         name: "Ex 3",
         createdAt: new Date(),
@@ -50,69 +47,85 @@ describe("MemoryExercisesRepo", () => {
         userId: "user-2",
       });
 
-      await repo.save(ex2);
-      await repo.save(ex3);
+      await repo.save(otherExercise);
+      await repo.save(anotherDifferentExercise);
 
-      const results = await repo.getByUserId("user-1");
+      const user1Exercises = await repo.getByUserId("user-1");
 
-      expect(results.map((r) => r.id)).toEqual(["ex2"]);
+      expect(user1Exercises.map((exercise) => exercise.id)).toEqual([
+        "other-exercise-id",
+      ]);
     });
 
     it("returns an empty array when no exercises match", async () => {
-      const results = await repo.getByUserId("non-existent-user");
+      const exercises = await repo.getByUserId("non-existent-user");
 
-      expect(results).toEqual([]);
+      expect(exercises).toEqual([]);
     });
   });
 
   describe("getByFuzzyName", () => {
     it("returns exercises matching a fuzzy name (case-insensitive)", async () => {
-      const ex2 = createTestExercise({ id: "ex2", name: "Push Up" });
-      const ex3 = createTestExercise({ id: "ex3", name: "Pull Down" });
+      const otherExercise = createTestExercise({
+        id: "other-exercise-id",
+        name: "Push Up",
+      });
+      const anotherDifferentExercise = createTestExercise({
+        id: "ex3",
+        name: "Pull Down",
+      });
 
-      await repo.save(ex2);
-      await repo.save(ex3);
+      await repo.save(otherExercise);
+      await repo.save(anotherDifferentExercise);
 
-      const results = await repo.getByFuzzyName("push");
+      const foundExercises = await repo.getByFuzzyName("push");
 
-      expect(results.map((r) => r.id)).toEqual(["ex2"]);
+      expect(foundExercises.map((exercise) => exercise.id)).toEqual([
+        "other-exercise-id",
+      ]);
     });
   });
 
   describe("getByNameAndUserId", () => {
     it("returns the exercise matching name and userId (case-insensitive)", async () => {
-      const ex2 = Exercise.create({
-        id: "ex2",
+      const otherExercise = Exercise.create({
+        id: "other-exercise-id",
         name: "My Exercise",
         createdAt: new Date(),
         updatedAt: new Date(),
         userId: "user-1",
       });
 
-      await repo.save(ex2);
+      await repo.save(otherExercise);
 
       const found = await repo.getByNameAndUserId("my exercise", "user-1");
 
-      expect(found.id).toBe("ex2");
+      expect(found!.id).toBe("other-exercise-id");
     });
 
-    it("throws NotFoundError when no exercise is found", async () => {
-      await expect(
-        repo.getByNameAndUserId("non existent", "non-existent-user"),
-      ).rejects.toThrow(NotFoundError);
+    it("should return null when no exercise is found", async () => {
+      const foundExercise = await repo.getByNameAndUserId(
+        "non-existent-name",
+        "user-1",
+      );
+
+      expect(foundExercise).toBeNull();
     });
   });
 
   describe("save", () => {
     it("persists a new exercise and can be retrieved", async () => {
-      const ex2 = createTestExercise({ id: "ex2", name: "New Exercise" });
+      const otherExercise = createTestExercise({
+        id: "other-exercise-id",
+        name: "New Exercise",
+      });
 
-      await repo.save(ex2);
+      await repo.save(otherExercise);
 
-      const found = await repo.getById("ex2");
+      const foundExercise = await repo.getById("other-exercise-id");
 
-      expect(found.id).toBe("ex2");
-      expect(found.name).toBe("New Exercise");
+      expect(foundExercise!.id).toBe("other-exercise-id");
+      expect(foundExercise!.name).toBe("New Exercise");
     });
 
     it("updates an existing exercise", async () => {
@@ -120,18 +133,21 @@ describe("MemoryExercisesRepo", () => {
 
       await repo.save(exercise);
 
-      const found = await repo.getById(exercise.id);
+      const foundExercise = await repo.getById(exercise.id);
 
-      expect(found.name).toBe("Renamed Exercise");
+      expect(foundExercise!.name).toBe("Renamed Exercise");
     });
 
     it("returns saved exercise", async () => {
-      const ex2 = createTestExercise({ id: "ex2", name: "New Exercise" });
+      const otherExercise = createTestExercise({
+        id: "other-exercise-id",
+        name: "New Exercise",
+      });
 
-      const savedExercise = await repo.save(ex2);
+      const savedExercise = await repo.save(otherExercise);
 
       expect(savedExercise).toBeInstanceOf(Exercise);
-      expect(savedExercise.id).toBe("ex2");
+      expect(savedExercise.id).toBe("other-exercise-id");
       expect(savedExercise.name).toBe("New Exercise");
     });
   });
@@ -140,23 +156,21 @@ describe("MemoryExercisesRepo", () => {
     it("removes an existing exercise", async () => {
       await repo.deleteById(exercise.id);
 
-      await expect(repo.getById(exercise.id)).rejects.toThrow(NotFoundError);
-      await expect(repo.getById(exercise.id)).rejects.toThrow(
-        /MemoryExercisesRepo:.*id.*not found/,
-      );
+      const foundExercise = await repo.getById(exercise.id);
+
+      expect(foundExercise).toBeNull();
     });
 
-    it("throws NotFoundError when deleting non-existing id", async () => {
-      await expect(repo.deleteById("nope")).rejects.toThrow(NotFoundError);
-      await expect(repo.deleteById("nope")).rejects.toThrow(
-        /MemoryExercisesRepo:.*id.*not found/,
-      );
+    it("returns null when deleting non-existing id", async () => {
+      const deletedExercise = await repo.deleteById("non-existent-id");
+
+      expect(deletedExercise).toBeNull();
     });
 
     it("returns the deleted exercise", async () => {
-      const deleted = await repo.deleteById(exercise.id);
+      const deletedExercise = await repo.deleteById(exercise.id);
 
-      expect(deleted.id).toBe(exercise.id);
+      expect(deletedExercise!.id).toBe(exercise.id);
     });
   });
 });
