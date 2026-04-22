@@ -79,6 +79,30 @@ describe("MemoryExercisesRepo", () => {
     });
   });
 
+  describe("getByNameAndUserId", () => {
+    it("returns the exercise matching name and userId (case-insensitive)", async () => {
+      const ex2 = Exercise.create({
+        id: "ex2",
+        name: "My Exercise",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        userId: "user-1",
+      });
+
+      await repo.save(ex2);
+
+      const found = await repo.getByNameAndUserId("my exercise", "user-1");
+
+      expect(found.id).toBe("ex2");
+    });
+
+    it("throws NotFoundError when no exercise is found", async () => {
+      await expect(
+        repo.getByNameAndUserId("non existent", "non-existent-user"),
+      ).rejects.toThrow(NotFoundError);
+    });
+  });
+
   describe("save", () => {
     it("persists a new exercise and can be retrieved", async () => {
       const ex2 = createTestExercise({ id: "ex2", name: "New Exercise" });

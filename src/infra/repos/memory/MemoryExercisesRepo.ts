@@ -32,6 +32,25 @@ export class MemoryExercisesRepo implements ExercisesRepo {
     );
   }
 
+  async getByNameAndUserId(name: string, userId: string): Promise<Exercise> {
+    const processedName = name.toLowerCase();
+
+    const exercises = Array.from(this.exercises.values());
+
+    const foundExercise = exercises.find(
+      (exercise) =>
+        exercise.userId === userId &&
+        exercise.name.toLowerCase() === processedName,
+    );
+
+    if (!foundExercise)
+      throw new NotFoundError(
+        `MemoryExercisesRepo: Exercise with name ${name} and userId ${userId} not found`,
+      );
+
+    return foundExercise;
+  }
+
   async save(exercise: Exercise): Promise<Exercise> {
     this.exercises.set(exercise.id, exercise);
 
