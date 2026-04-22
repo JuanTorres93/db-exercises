@@ -17,3 +17,13 @@ export function toExerciseDTO(exercise: Exercise): ExerciseDTO {
     updatedAt: exercise.updatedAt.toISOString(),
   };
 }
+
+export function toExercise(exerciseDTO: ExerciseDTO): Exercise {
+  return Exercise.create({
+    id: exerciseDTO.id,
+    name: exerciseDTO.name,
+    userId: exerciseDTO.userId,
+    createdAt: new Date(exerciseDTO.createdAt),
+    updatedAt: new Date(exerciseDTO.updatedAt),
+  });
+}

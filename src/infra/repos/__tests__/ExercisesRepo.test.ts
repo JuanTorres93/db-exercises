@@ -2,20 +2,42 @@ import { Exercise } from "@/domain/entities/exercise/Exercise";
 
 import { createTestExercise } from "../../../../tests/createProps/exerciseTestProps";
 import { MemoryExercisesRepo } from "../memory/MemoryExercisesRepo";
+import { MongooseExercisesRepo } from "../mongoose/MongooseExercisesRepo";
+import {
+  clearMongoTestDB,
+  setupMongoTestDB,
+  teardownMongoTestDB,
+} from "../mongoose/__tests__/setupMongoTestDB";
 
-const repos = [{ name: "MemoryExercisesRepo", repoClass: MemoryExercisesRepo }];
+const repos = [
+  { name: "MemoryExercisesRepo", repoClass: MemoryExercisesRepo },
+  {
+    name: "MongooseExercisesRepo",
+    repoClass: MongooseExercisesRepo,
+  },
+];
 
 repos.forEach(({ name, repoClass }) => {
   describe(name, () => {
     let repo: InstanceType<typeof repoClass>;
     let exercise: Exercise;
 
+    beforeAll(async () => {
+      if (name === "MongooseExercisesRepo") await setupMongoTestDB();
+    });
+
     beforeEach(async () => {
+      if (name === "MongooseExercisesRepo") await clearMongoTestDB();
+
       exercise = createTestExercise();
 
       repo = new repoClass();
 
       await repo.save(exercise);
+    });
+
+    afterAll(async () => {
+      if (name === "MongooseExercisesRepo") await teardownMongoTestDB();
     });
 
     describe("getById", () => {

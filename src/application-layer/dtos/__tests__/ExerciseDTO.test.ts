@@ -2,7 +2,7 @@ import { Exercise } from "@/domain/entities/exercise/Exercise";
 
 import * as exerciseTestProps from "../../../../tests/createProps/exerciseTestProps";
 import { exerciseDTOProperties } from "../../../../tests/dtoProperties/exerciseDtoProperties";
-import { ExerciseDTO, toExerciseDTO } from "../ExerciseDTO";
+import { ExerciseDTO, toExercise, toExerciseDTO } from "../ExerciseDTO";
 
 describe("ExerciseDTO", () => {
   let exercise: Exercise;
@@ -40,6 +40,29 @@ describe("ExerciseDTO", () => {
       expect(typeof exerciseDTO.updatedAt).toBe("string");
       expect(exerciseDTO.createdAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
       expect(exerciseDTO.updatedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+    });
+  });
+
+  describe("toExercise", () => {
+    it("should convert ExerciseDTO back to Exercise", () => {
+      const convertedExercise = toExercise({
+        id: exerciseDTO.id,
+        name: exerciseDTO.name,
+        userId: exerciseDTO.userId,
+        createdAt: exerciseDTO.createdAt,
+        updatedAt: exerciseDTO.updatedAt,
+      });
+
+      expect(convertedExercise).toBeInstanceOf(Exercise);
+      expect(convertedExercise.id).toBe(exercise.id);
+      expect(convertedExercise.name).toBe(exercise.name);
+      expect(convertedExercise.userId).toBe(exercise.userId);
+      expect(convertedExercise.createdAt.toISOString()).toBe(
+        exercise.createdAt.toISOString(),
+      );
+      expect(convertedExercise.updatedAt.toISOString()).toBe(
+        exercise.updatedAt.toISOString(),
+      );
     });
   });
 });
