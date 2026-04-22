@@ -27,36 +27,36 @@ describe("AddCommonExerciseUsecase", () => {
 
   describe("Execution", () => {
     it("should return ExerciseDTO", async () => {
-      const result = await usecase.execute({
+      const exerciseDTO = await usecase.execute({
         name: exercise.name,
       });
 
-      expect(result).not.toBeInstanceOf(Exercise);
+      expect(exerciseDTO).not.toBeInstanceOf(Exercise);
       for (const prop of exerciseDTOProperties) {
-        expect(result).toHaveProperty(prop);
+        expect(exerciseDTO).toHaveProperty(prop);
       }
     });
 
     it("should generate different ids for different exercises", async () => {
-      const result1 = await usecase.execute({
+      const exerciseDTO = await usecase.execute({
         name: "One exercise name",
       });
 
-      const result2 = await usecase.execute({
+      const anotherExerciseDTO = await usecase.execute({
         name: "Another exercise name",
       });
 
-      expect(result1.id).not.toBe(result2.id);
+      expect(exerciseDTO.id).not.toBe(anotherExerciseDTO.id);
     });
   });
 
   describe("Side effects", () => {
     it("should persist new exercise in the repository", async () => {
-      const result = await usecase.execute({
+      const exerciseDTO = await usecase.execute({
         name: exercise.name,
       });
 
-      const foundExercise = await exercisesRepo.getById(result.id);
+      const foundExercise = await exercisesRepo.getById(exerciseDTO.id);
 
       expect(foundExercise).not.toBeNull();
       expect(foundExercise!.name).toBe(exercise.name);

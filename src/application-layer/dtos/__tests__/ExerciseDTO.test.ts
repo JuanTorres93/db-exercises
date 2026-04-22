@@ -9,7 +9,9 @@ describe("ExerciseDTO", () => {
   let exerciseDTO: ExerciseDTO;
 
   beforeEach(() => {
-    exercise = exerciseTestProps.createTestExercise();
+    exercise = exerciseTestProps.createTestExercise({
+      userId: "user-1",
+    });
   });
 
   describe("toExerciseDTO", () => {
@@ -27,6 +29,7 @@ describe("ExerciseDTO", () => {
       expect(exerciseDTO).toEqual({
         id: exercise.id,
         name: exercise.name,
+        userId: exercise.userId,
         createdAt: exercise.createdAt.toISOString(),
         updatedAt: exercise.updatedAt.toISOString(),
       });
