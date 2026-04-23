@@ -1,12 +1,15 @@
 import { Exercise } from "@/domain/entities/exercise/Exercise";
 import { MemoryExercisesRepo } from "@/infra/repos/memory/MemoryExercisesRepo";
 
-import { createTestExercise } from "../../../../../tests/createProps/exerciseTestProps";
 import { exerciseDTOProperties } from "../../../../../tests/dtoProperties/exerciseDtoProperties";
+import {
+  USER_ONE_ID,
+  USER_TWO_ID,
+  createSeedExercisesNoPersistence,
+  getCommonExercises,
+  getExercisesForUser,
+} from "../../../../../tests/seeds/createSeedExercisesNoPersistence";
 import { GetExercisesByFuzzyNameUsecase } from "../GetExercisesByFuzzyNameUsecase";
-
-const USER_ONE_ID = "user-1";
-const USER_TWO_ID = "user-2";
 
 describe("GetExercisesByFuzzyNameUsecase", () => {
   let exerciseRepo: MemoryExercisesRepo;
@@ -18,7 +21,7 @@ describe("GetExercisesByFuzzyNameUsecase", () => {
 
     usecase = new GetExercisesByFuzzyNameUsecase(exerciseRepo);
 
-    exercises = createSeedExercises();
+    exercises = createSeedExercisesNoPersistence();
 
     exercises.forEach(async (exercise) => {
       await exerciseRepo.save(exercise);
@@ -87,63 +90,3 @@ describe("GetExercisesByFuzzyNameUsecase", () => {
     });
   });
 });
-
-function getExercisesForUser(userId: string) {
-  return createSeedExercises().filter((exercise) => exercise.userId === userId);
-}
-
-function getCommonExercises() {
-  return createSeedExercises().filter((exercise) => !exercise.userId);
-}
-
-function createSeedExercises() {
-  return [
-    createTestExercise({
-      id: "ex1",
-      name: "Test Exercise",
-      userId: USER_ONE_ID,
-    }),
-    createTestExercise({
-      id: "ex2",
-      name: "Another Exercise",
-      userId: USER_ONE_ID,
-    }),
-    createTestExercise({
-      id: "ex3",
-      name: "Yet Another Exercise",
-      userId: USER_ONE_ID,
-    }),
-
-    createTestExercise({
-      id: "ex4",
-      name: "Some Exercise",
-      userId: USER_TWO_ID,
-    }),
-    createTestExercise({
-      id: "ex5",
-      name: "Some Other Exercise",
-      userId: USER_TWO_ID,
-    }),
-
-    createTestExercise({
-      id: "ex6",
-      name: "Different Exercise",
-    }),
-    createTestExercise({
-      id: "ex7",
-      name: "Unique Exercise",
-    }),
-    createTestExercise({
-      id: "ex8",
-      name: "Special Exercise",
-    }),
-    createTestExercise({
-      id: "ex9",
-      name: "Common Exercise",
-    }),
-    createTestExercise({
-      id: "ex10",
-      name: "Final Exercise",
-    }),
-  ];
-}
