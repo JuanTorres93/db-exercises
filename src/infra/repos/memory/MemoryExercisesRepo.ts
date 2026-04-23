@@ -91,4 +91,8 @@ export class MemoryExercisesRepo implements ExercisesRepo {
   clearForTesting() {
     this.exercises.clear();
   }
+
+  getAllForTesting() {
+    return Array.from(this.exercises.values());
+  }
 }
