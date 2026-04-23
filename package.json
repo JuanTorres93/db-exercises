@@ -23,9 +23,11 @@
     "@types/mongodb-memory-server": "^1.8.0",
     "@types/morgan": "^1.9.10",
     "@types/node": "^25.6.0",
+    "@types/supertest": "^7.2.0",
     "husky": "^9.1.7",
     "mongodb-memory-server": "^11.0.1",
     "nodemon": "^3.1.14",
+    "supertest": "^7.2.2",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.4"

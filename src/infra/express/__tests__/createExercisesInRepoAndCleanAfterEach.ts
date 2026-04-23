@@ -18,6 +18,8 @@ export async function createExercisesInRepoAndCleanAfterEach() {
     );
   }
 
+  AppExercisesRepo.clearForTesting();
+
   const commonExercises = getCommonExercises();
   const exercisesForUserOne = getExercisesForUser(USER_ONE_ID);
   const exercisesForUserTwo = getExercisesForUser(USER_TWO_ID);
