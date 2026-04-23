@@ -1,7 +1,7 @@
 import { AlreadyExistsError } from "@/domain/common/errors";
 import { Exercise } from "@/domain/entities/exercise/Exercise";
 import { MemoryExercisesRepo } from "@/infra/repos/memory/MemoryExercisesRepo";
-import { Uuidv4IdGenerator } from "@/infra/services/Uuidv4IdGenerator/Uuidv4IdGenerator";
+import { CryptoUUIDIdGenerator } from "@/infra/services/Uuidv4IdGenerator/CryptoUUIDIdGenerator";
 
 import { createTestExercise } from "../../../../../tests/createProps/exerciseTestProps";
 import { exerciseDTOProperties } from "../../../../../tests/dtoProperties/exerciseDtoProperties";
@@ -9,14 +9,14 @@ import { AddCommonExerciseUsecase } from "../AddCommonExerciseUsecase";
 
 describe("AddCommonExerciseUsecase", () => {
   let exercisesRepo: MemoryExercisesRepo;
-  let idGenerator: Uuidv4IdGenerator;
+  let idGenerator: CryptoUUIDIdGenerator;
 
   let usecase: AddCommonExerciseUsecase;
   let exercise: Exercise;
 
   beforeEach(async () => {
     exercisesRepo = new MemoryExercisesRepo();
-    idGenerator = new Uuidv4IdGenerator();
+    idGenerator = new CryptoUUIDIdGenerator();
 
     usecase = new AddCommonExerciseUsecase(exercisesRepo, idGenerator);
 
