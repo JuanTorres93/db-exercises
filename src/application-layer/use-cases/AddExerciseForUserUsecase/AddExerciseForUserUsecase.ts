@@ -2,10 +2,14 @@ import {
   ExerciseDTO,
   toExerciseDTO,
 } from "@/application-layer/dtos/ExerciseDTO";
-import { IdGenerator } from "@/application-layer/services/IdGenerator.port";
-import { AlreadyExistsError, ValidationError } from "@/domain/common/errors";
-import { Exercise } from "@/domain/entities/exercise/Exercise";
-import { ExercisesRepo } from "@/domain/repos/ExercisesRepo.port";
+
+import { IdGenerator } from "../../../application-layer/services/IdGenerator.port";
+import {
+  AlreadyExistsError,
+  ValidationError,
+} from "../../../domain/common/errors";
+import { Exercise } from "../../../domain/entities/exercise/Exercise";
+import { ExercisesRepo } from "../../../domain/repos/ExercisesRepo.port";
 
 export type AddExerciseForUserUsecaseRequest = {
   name: string;

@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 
-import { AddExerciseForUserUsecaseRequest } from "@/application-layer/use-cases/AddExerciseForUserUsecase/AddExerciseForUserUsecase";
-import { AlreadyExistsError, ValidationError } from "@/domain/common/errors";
-import { AppAddExerciseForUserUsecase } from "@/interface-adapters/use-cases/AppAddExerciseForUserUsecase";
-
+import { AddExerciseForUserUsecaseRequest } from "../../../application-layer/use-cases/AddExerciseForUserUsecase/AddExerciseForUserUsecase";
+import {
+  AlreadyExistsError,
+  ValidationError,
+} from "../../../domain/common/errors";
+import { AppAddExerciseForUserUsecase } from "../../../interface-adapters/use-cases/AppAddExerciseForUserUsecase";
 import { JSENDFailure, JSENDSuccess } from "../common/JSEND";
 
 export async function createNewExercise(

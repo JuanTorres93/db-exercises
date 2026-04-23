@@ -1,7 +1,7 @@
 import { AlreadyExistsError, ValidationError } from "@/domain/common/errors";
 import { Exercise } from "@/domain/entities/exercise/Exercise";
 import { MemoryExercisesRepo } from "@/infra/repos/memory/MemoryExercisesRepo";
-import { CryptoUUIDIdGenerator } from "@/infra/services/Uuidv4IdGenerator/CryptoUUIDIdGenerator";
+import { CryptoUUIDIdGenerator } from "@/infra/services/CryptoUUIDIdGenerator/CryptoUUIDIdGenerator";
 
 import { createTestExercise } from "../../../../../tests/createProps/exerciseTestProps";
 import { exerciseDTOProperties } from "../../../../../tests/dtoProperties/exerciseDtoProperties";

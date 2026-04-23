@@ -1,3 +1,3 @@
-import { CryptoUUIDIdGenerator } from "@/infra/services/Uuidv4IdGenerator/CryptoUUIDIdGenerator";
+import { CryptoUUIDIdGenerator } from "../../infra/services/CryptoUUIDIdGenerator/CryptoUUIDIdGenerator";
 
 export const AppIdGenerator = new CryptoUUIDIdGenerator();
