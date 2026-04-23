@@ -87,4 +87,8 @@ export class MemoryExercisesRepo implements ExercisesRepo {
 
     return exercise;
   }
+
+  clearForTesting() {
+    this.exercises.clear();
+  }
 }
