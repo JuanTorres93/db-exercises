@@ -8,6 +8,8 @@ export const handleUnhandledErrors: ErrorRequestHandler = (
   res: Response,
   _next: NextFunction,
 ) => {
+  console.error("Unhandled error:", err);
+
   const jsend: JSENDError = {
     status: "error",
     message: "Something went wrong",
