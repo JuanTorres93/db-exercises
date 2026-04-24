@@ -5,7 +5,10 @@ import { AppExercisesRepo } from "@/interface-adapters/repos/AppExercisesRepo";
 
 import { USER_ONE_ID } from "../../../../../tests/seeds/createSeedExercisesNoPersistence";
 import app from "../../app";
-import { setupExercisesRouteTests } from "./setupExercisesRouteTests";
+import {
+  getExistingExercise,
+  setupExercisesRouteTests,
+} from "./setupExercisesRouteTests";
 
 describe("POST /exercises", () => {
   setupExercisesRouteTests();
@@ -48,9 +51,7 @@ describe("POST /exercises", () => {
     let duplicatedExerciseRequestBody: AddExerciseForUserUsecaseRequest;
 
     beforeAll(async () => {
-      const existingExercise = (
-        await AppExercisesRepo.getByUserId(USER_ONE_ID)
-      )[0];
+      const existingExercise = await getExistingExercise();
 
       duplicatedExerciseRequestBody = {
         ...newUserExerciseBody,
