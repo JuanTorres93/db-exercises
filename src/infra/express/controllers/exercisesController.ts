@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 
+import { GetExercisesByFuzzyNameUsecaseRequest } from "@/application-layer/use-cases/GetExercisesByFuzzyNameUsecase/GetExercisesByFuzzyNameUsecase";
 import { RenameExerciseForUserIdUsecaseRequest } from "@/application-layer/use-cases/RenameExerciseForUserIdUsecase/RenameExerciseForUserIdUsecase";
+import { AppGetExercisesByFuzzyNameUsecase } from "@/interface-adapters/use-cases/AppGetExercisesByFuzzyNameUsecase";
 import { AppRenameExerciseForUserIdUsecase } from "@/interface-adapters/use-cases/AppRenameExerciseForUserIdUsecase";
 
 import { AddExerciseForUserUsecaseRequest } from "../../../application-layer/use-cases/AddExerciseForUserUsecase/AddExerciseForUserUsecase";
@@ -100,6 +102,34 @@ export async function renameExercise(
       return res.status(404).json(jsend);
     }
 
+    next(error);
+  }
+}
+
+export async function getExercisesByFuzzyName(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const { fuzzyName } = req.params;
+    const userId = req.query.userId as string;
+
+    const searchData: GetExercisesByFuzzyNameUsecaseRequest = {
+      name: fuzzyName as string,
+      userId,
+    };
+
+    const exercises =
+      await AppGetExercisesByFuzzyNameUsecase.execute(searchData);
+
+    const jsend: JSENDSuccess<typeof exercises> = {
+      status: "success",
+      data: exercises,
+    };
+
+    res.status(200).json(jsend);
+  } catch (error) {
     next(error);
   }
 }
