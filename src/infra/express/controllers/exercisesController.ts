@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 
+import { DeleteExerciseForUserUsecaseRequest } from "@/application-layer/use-cases/DeleteExerciseForUserUsecase/DeleteExerciseForUserUsecase";
 import { GetExercisesByFuzzyNameUsecaseRequest } from "@/application-layer/use-cases/GetExercisesByFuzzyNameUsecase/GetExercisesByFuzzyNameUsecase";
 import { RenameExerciseForUserIdUsecaseRequest } from "@/application-layer/use-cases/RenameExerciseForUserIdUsecase/RenameExerciseForUserIdUsecase";
+import { AppDeleteExerciseForUserUsecase } from "@/interface-adapters/use-cases/AppDeleteExerciseForUserUsecase";
 import { AppGetExercisesByFuzzyNameUsecase } from "@/interface-adapters/use-cases/AppGetExercisesByFuzzyNameUsecase";
 import { AppRenameExerciseForUserIdUsecase } from "@/interface-adapters/use-cases/AppRenameExerciseForUserIdUsecase";
 
@@ -95,6 +97,46 @@ export async function renameExercise(
     }
 
     if (error instanceof NotFoundError || error instanceof PermissionError) {
+      jsend.data = {
+        exerciseId: "The exercise does not exist",
+      };
+
+      return res.status(404).json(jsend);
+    }
+
+    next(error);
+  }
+}
+
+export async function deleteExercise(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const { exerciseId } = req.params;
+
+    const deleteData: DeleteExerciseForUserUsecaseRequest = {
+      ...req.body,
+      exerciseId,
+    };
+
+    const deletedExercise =
+      await AppDeleteExerciseForUserUsecase.execute(deleteData);
+
+    const jsend: JSENDSuccess<typeof deletedExercise> = {
+      status: "success",
+      data: deletedExercise,
+    };
+
+    res.status(200).json(jsend);
+  } catch (error) {
+    const jsend: JSENDFailure = {
+      status: "fail",
+      data: {},
+    };
+
+    if (error instanceof NotFoundError) {
       jsend.data = {
         exerciseId: "The exercise does not exist",
       };
