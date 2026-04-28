@@ -120,7 +120,7 @@ describe("PUT /exercises/:exerciseId", () => {
       );
     });
 
-    it("should return 404 if a user tries to rename an exercise that does not belong to them", async () => {
+    it("should return 409 if a user tries to rename an exercise that does not belong to them", async () => {
       const existingExercise = await getExistingExercise();
 
       const response = await request(app)
@@ -130,7 +130,7 @@ describe("PUT /exercises/:exerciseId", () => {
           userId: "some-other-user-id",
         });
 
-      expect(response.status).toBe(404);
+      expect(response.status).toBe(409);
     });
   });
 });

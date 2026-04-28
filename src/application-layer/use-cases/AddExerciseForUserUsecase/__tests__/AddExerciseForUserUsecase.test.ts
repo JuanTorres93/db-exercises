@@ -86,7 +86,7 @@ describe("AddExerciseForUserUsecase", () => {
           name: exercise.name,
           userId: "",
         }),
-      ).rejects.toThrow(/AddExerciseForUserUsecase.*ID is required/);
+      ).rejects.toThrow("User ID is required");
     });
 
     it("should throw error if name already exists for user id", async () => {
@@ -109,7 +109,7 @@ describe("AddExerciseForUserUsecase", () => {
           name,
           userId,
         }),
-      ).rejects.toThrow(/AddExerciseForUserUsecase.*already exists/);
+      ).rejects.toThrow("An exercise with the same name already exists");
     });
   });
 });

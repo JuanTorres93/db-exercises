@@ -81,7 +81,7 @@ describe("RenameExerciseForUserIdUsecase", () => {
           userId: exercise.userId!,
           newName: "New Name",
         }),
-      ).rejects.toThrow(/RenameExerciseForUserIdUsecase.*not found/);
+      ).rejects.toThrow("The exercise does not exist");
     });
 
     it("should throw PermissionError if exercise does not belong to user", async () => {
@@ -99,7 +99,7 @@ describe("RenameExerciseForUserIdUsecase", () => {
           userId: "other-user",
           newName: "New Name",
         }),
-      ).rejects.toThrow(/RenameExerciseForUserIdUsecase.*does not belong/);
+      ).rejects.toThrow("The exercise does not exist");
     });
 
     it("should throw AlreadyExistsError if new name already exists for user", async () => {
@@ -124,7 +124,7 @@ describe("RenameExerciseForUserIdUsecase", () => {
           userId: exercise.userId!,
           newName: otherExercise.name,
         }),
-      ).rejects.toThrow(/RenameExerciseForUserIdUsecase.*already exists/);
+      ).rejects.toThrow("An exercise with the same name already exists");
     });
   });
 });

@@ -82,9 +82,7 @@ describe("AddCommonExerciseUsecase", () => {
         usecase.execute({
           name: exercise.name,
         }),
-      ).rejects.toThrow(
-        /AddCommonExerciseUsecase: Exercise with name.*already exists/,
-      );
+      ).rejects.toThrow("An exercise with the same name already exists");
     });
   });
 });

@@ -26,7 +26,8 @@ export class AddCommonExerciseUsecase {
 
     if (existingExercise) {
       throw new AlreadyExistsApplicationError(
-        `AddCommonExerciseUsecase: Exercise with name "${request.name}" already exists.`,
+        "name",
+        "An exercise with the same name already exists",
       );
     }
 

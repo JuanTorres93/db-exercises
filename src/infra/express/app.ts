@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 
+import { handleKnownErrors } from "./common/handleKnownErrors";
 import { handleUnhandledErrors } from "./common/handleUnhandledErrors";
 import exercisesRouter from "./routes/exercisesRoutes";
 
@@ -14,7 +15,8 @@ if (process.env.NODE_ENV !== "test") app.use(morgan("short"));
 
 app.use("/exercises", exercisesRouter);
 
-// IMPORTANT NOTE: This should be the last middleware in the chain, after all routes and other middlewares have been defined.
+// IMPORTANT NOTE: These should be the last middlewares in the chain, after all routes and other middlewares have been defined.
+app.use(handleKnownErrors);
 app.use(handleUnhandledErrors);
 
 export default app;

@@ -1,8 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 
-import { NotFoundApplicationError } from "@/application-layer/common/applicationErrors";
-import { AlreadyExistsApplicationError } from "@/application-layer/common/applicationErrors";
-import { PermissionApplicationError } from "@/application-layer/common/applicationErrors";
 import { DeleteExerciseForUserUsecaseRequest } from "@/application-layer/use-cases/DeleteExerciseForUserUsecase/DeleteExerciseForUserUsecase";
 import { GetExercisesByFuzzyNameUsecaseRequest } from "@/application-layer/use-cases/GetExercisesByFuzzyNameUsecase/GetExercisesByFuzzyNameUsecase";
 import { RenameExerciseForUserIdUsecaseRequest } from "@/application-layer/use-cases/RenameExerciseForUserIdUsecase/RenameExerciseForUserIdUsecase";
@@ -11,9 +8,8 @@ import { AppGetExercisesByFuzzyNameUsecase } from "@/interface-adapters/use-case
 import { AppRenameExerciseForUserIdUsecase } from "@/interface-adapters/use-cases/AppRenameExerciseForUserIdUsecase";
 
 import { AddExerciseForUserUsecaseRequest } from "../../../application-layer/use-cases/AddExerciseForUserUsecase/AddExerciseForUserUsecase";
-import { ValidationDomainError } from "../../../domain/common/domainErrors";
 import { AppAddExerciseForUserUsecase } from "../../../interface-adapters/use-cases/AppAddExerciseForUserUsecase";
-import { JSENDFailure, JSENDSuccess } from "../common/JSEND";
+import { JSENDSuccess } from "../common/JSEND";
 
 export async function createNewExercise(
   req: Request,
@@ -33,27 +29,6 @@ export async function createNewExercise(
 
     res.status(201).json(jsend);
   } catch (error) {
-    const jsend: JSENDFailure = {
-      status: "fail",
-      data: {},
-    };
-
-    if (error instanceof AlreadyExistsApplicationError) {
-      jsend.data = {
-        name: "An exercise with the same name already exists",
-      };
-
-      return res.status(409).json(jsend);
-    }
-
-    if (error instanceof ValidationDomainError) {
-      jsend.data = {
-        userId: "A userId is required",
-      };
-
-      return res.status(400).json(jsend);
-    }
-
     next(error);
   }
 }
@@ -81,30 +56,6 @@ export async function renameExercise(
 
     res.status(200).json(jsend);
   } catch (error) {
-    const jsend: JSENDFailure = {
-      status: "fail",
-      data: {},
-    };
-
-    if (error instanceof AlreadyExistsApplicationError) {
-      jsend.data = {
-        name: "An exercise with the same name already exists",
-      };
-
-      return res.status(409).json(jsend);
-    }
-
-    if (
-      error instanceof NotFoundApplicationError ||
-      error instanceof PermissionApplicationError
-    ) {
-      jsend.data = {
-        exerciseId: "The exercise does not exist",
-      };
-
-      return res.status(404).json(jsend);
-    }
-
     next(error);
   }
 }
@@ -132,19 +83,6 @@ export async function deleteExercise(
 
     res.status(200).json(jsend);
   } catch (error) {
-    const jsend: JSENDFailure = {
-      status: "fail",
-      data: {},
-    };
-
-    if (error instanceof NotFoundApplicationError) {
-      jsend.data = {
-        exerciseId: "The exercise does not exist",
-      };
-
-      return res.status(404).json(jsend);
-    }
-
     next(error);
   }
 }

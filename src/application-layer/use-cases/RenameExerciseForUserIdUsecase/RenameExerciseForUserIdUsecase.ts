@@ -27,19 +27,22 @@ export class RenameExerciseForUserIdUsecase {
 
     if (!exercise) {
       throw new NotFoundApplicationError(
-        `RenameExerciseForUserIdUsecase: Exercise with id "${request.exerciseId}" not found`,
+        "exerciseId",
+        "The exercise does not exist",
       );
     }
 
     if (exercise.userId !== request.userId) {
       throw new PermissionApplicationError(
-        `RenameExerciseForUserIdUsecase: Exercise with id "${request.exerciseId}" does not belong to user "${request.userId}"`,
+        "exerciseId",
+        "The exercise does not exist",
       );
     }
 
     if (existingExercise) {
       throw new AlreadyExistsApplicationError(
-        `RenameExerciseForUserIdUsecase: Exercise with name "${request.newName}" already exists for userId "${request.userId}"`,
+        "name",
+        "An exercise with the same name already exists",
       );
     }
 

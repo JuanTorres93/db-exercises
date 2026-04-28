@@ -3,7 +3,7 @@ import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import { JSENDError } from "./JSEND";
 
 export const handleUnhandledErrors: ErrorRequestHandler = (
-  err: ErrorRequestHandler,
+  err: Error,
   _req: Request,
   res: Response,
   _next: NextFunction,

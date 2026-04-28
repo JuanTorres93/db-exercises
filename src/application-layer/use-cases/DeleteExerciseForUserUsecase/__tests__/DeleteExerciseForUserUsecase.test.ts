@@ -70,7 +70,7 @@ describe("DeleteExerciseForUserUsecase", () => {
           exerciseId: "non-existent-id",
           userId: exercise.userId!,
         }),
-      ).rejects.toThrow(/DeleteExerciseForUserUsecase.*not found/);
+      ).rejects.toThrow("The exercise does not exist");
     });
 
     it("should throw NotFoundError if exercise does not belong to user", async () => {
@@ -86,7 +86,7 @@ describe("DeleteExerciseForUserUsecase", () => {
           exerciseId: "non-existent-id",
           userId: exercise.userId!,
         }),
-      ).rejects.toThrow(/DeleteExerciseForUserUsecase.*not found/);
+      ).rejects.toThrow("The exercise does not exist");
     });
   });
 });

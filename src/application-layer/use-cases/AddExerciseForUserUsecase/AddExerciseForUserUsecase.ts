@@ -24,9 +24,7 @@ export class AddExerciseForUserUsecase {
     request: AddExerciseForUserUsecaseRequest,
   ): Promise<ExerciseDTO> {
     if (!request.userId) {
-      throw new ValidationApplicationError(
-        "AddExerciseForUserUsecase: User ID is required",
-      );
+      throw new ValidationApplicationError("userId", "User ID is required");
     }
 
     const existingExercise = await this.exercisesRepo.getByNameAndUserId(
@@ -36,7 +34,8 @@ export class AddExerciseForUserUsecase {
 
     if (existingExercise) {
       throw new AlreadyExistsApplicationError(
-        `AddExerciseForUserUsecase: Exercise with name "${request.name}" already exists for userId "${request.userId}".`,
+        "name",
+        "An exercise with the same name already exists",
       );
     }
 

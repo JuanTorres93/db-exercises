@@ -22,7 +22,8 @@ export class DeleteExerciseForUserUsecase {
 
     if (!exerciseExistsAndBelongsToUser(exercise, request.userId)) {
       throw new NotFoundApplicationError(
-        `DeleteExerciseForUserUsecase: Exercise with id "${request.exerciseId}" not found`,
+        "exerciseId",
+        "The exercise does not exist",
       );
     }
 
