@@ -1,12 +1,10 @@
 import { NotFoundApplicationError } from "@/application-layer/common/applicationErrors";
+import { AlreadyExistsApplicationError } from "@/application-layer/common/applicationErrors";
 import {
   ExerciseDTO,
   toExerciseDTO,
 } from "@/application-layer/dtos/ExerciseDTO";
-import {
-  AlreadyExistsError,
-  PermissionError,
-} from "@/domain/common/domainErrors";
+import { PermissionError } from "@/domain/common/domainErrors";
 import { ExercisesRepo } from "@/domain/repos/ExercisesRepo.port";
 
 export type RenameExerciseForUserIdUsecaseRequest = {
@@ -40,7 +38,7 @@ export class RenameExerciseForUserIdUsecase {
     }
 
     if (existingExercise) {
-      throw new AlreadyExistsError(
+      throw new AlreadyExistsApplicationError(
         `RenameExerciseForUserIdUsecase: Exercise with name "${request.newName}" already exists for userId "${request.userId}"`,
       );
     }

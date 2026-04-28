@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import { NotFoundApplicationError } from "@/application-layer/common/applicationErrors";
+import { AlreadyExistsApplicationError } from "@/application-layer/common/applicationErrors";
 import { DeleteExerciseForUserUsecaseRequest } from "@/application-layer/use-cases/DeleteExerciseForUserUsecase/DeleteExerciseForUserUsecase";
 import { GetExercisesByFuzzyNameUsecaseRequest } from "@/application-layer/use-cases/GetExercisesByFuzzyNameUsecase/GetExercisesByFuzzyNameUsecase";
 import { RenameExerciseForUserIdUsecaseRequest } from "@/application-layer/use-cases/RenameExerciseForUserIdUsecase/RenameExerciseForUserIdUsecase";
@@ -10,7 +11,6 @@ import { AppRenameExerciseForUserIdUsecase } from "@/interface-adapters/use-case
 
 import { AddExerciseForUserUsecaseRequest } from "../../../application-layer/use-cases/AddExerciseForUserUsecase/AddExerciseForUserUsecase";
 import {
-  AlreadyExistsError,
   PermissionError,
   ValidationError,
 } from "../../../domain/common/domainErrors";
@@ -40,7 +40,7 @@ export async function createNewExercise(
       data: {},
     };
 
-    if (error instanceof AlreadyExistsError) {
+    if (error instanceof AlreadyExistsApplicationError) {
       jsend.data = {
         name: "An exercise with the same name already exists",
       };
@@ -88,7 +88,7 @@ export async function renameExercise(
       data: {},
     };
 
-    if (error instanceof AlreadyExistsError) {
+    if (error instanceof AlreadyExistsApplicationError) {
       jsend.data = {
         name: "An exercise with the same name already exists",
       };

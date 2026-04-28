@@ -1,13 +1,11 @@
+import { AlreadyExistsApplicationError } from "@/application-layer/common/applicationErrors";
 import {
   ExerciseDTO,
   toExerciseDTO,
 } from "@/application-layer/dtos/ExerciseDTO";
 
 import { IdGenerator } from "../../../application-layer/services/IdGenerator.port";
-import {
-  AlreadyExistsError,
-  ValidationError,
-} from "../../../domain/common/domainErrors";
+import { ValidationError } from "../../../domain/common/domainErrors";
 import { Exercise } from "../../../domain/entities/exercise/Exercise";
 import { ExercisesRepo } from "../../../domain/repos/ExercisesRepo.port";
 
@@ -37,7 +35,7 @@ export class AddExerciseForUserUsecase {
     );
 
     if (existingExercise) {
-      throw new AlreadyExistsError(
+      throw new AlreadyExistsApplicationError(
         `AddExerciseForUserUsecase: Exercise with name "${request.name}" already exists for userId "${request.userId}".`,
       );
     }

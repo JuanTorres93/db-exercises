@@ -6,3 +6,5 @@ export function isApplicationError(err: Error) {
   return err instanceof ApplicationError;
 }
 export class NotFoundApplicationError extends DomainError {}
+
+export class AlreadyExistsApplicationError extends DomainError {}
