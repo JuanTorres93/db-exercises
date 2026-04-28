@@ -1,12 +1,10 @@
-import { DomainError } from "@/domain/common/domainErrors";
-
 export class ApplicationError extends Error {}
 
 export function isApplicationError(err: Error) {
   return err instanceof ApplicationError;
 }
-export class NotFoundApplicationError extends DomainError {}
+export class NotFoundApplicationError extends ApplicationError {}
 
-export class AlreadyExistsApplicationError extends DomainError {}
+export class AlreadyExistsApplicationError extends ApplicationError {}
 
-export class PermissionApplicationError extends DomainError {}
+export class PermissionApplicationError extends ApplicationError {}
