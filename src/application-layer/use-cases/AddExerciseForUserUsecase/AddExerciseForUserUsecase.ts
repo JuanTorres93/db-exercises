@@ -1,11 +1,11 @@
 import { AlreadyExistsApplicationError } from "@/application-layer/common/applicationErrors";
+import { ValidationApplicationError } from "@/application-layer/common/applicationErrors";
 import {
   ExerciseDTO,
   toExerciseDTO,
 } from "@/application-layer/dtos/ExerciseDTO";
 
 import { IdGenerator } from "../../../application-layer/services/IdGenerator.port";
-import { ValidationDomainError } from "../../../domain/common/domainErrors";
 import { Exercise } from "../../../domain/entities/exercise/Exercise";
 import { ExercisesRepo } from "../../../domain/repos/ExercisesRepo.port";
 
@@ -24,7 +24,7 @@ export class AddExerciseForUserUsecase {
     request: AddExerciseForUserUsecaseRequest,
   ): Promise<ExerciseDTO> {
     if (!request.userId) {
-      throw new ValidationDomainError(
+      throw new ValidationApplicationError(
         "AddExerciseForUserUsecase: User ID is required",
       );
     }
