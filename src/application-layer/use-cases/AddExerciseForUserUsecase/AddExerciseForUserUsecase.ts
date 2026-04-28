@@ -7,7 +7,7 @@ import { IdGenerator } from "../../../application-layer/services/IdGenerator.por
 import {
   AlreadyExistsError,
   ValidationError,
-} from "../../../domain/common/errors";
+} from "../../../domain/common/domainErrors";
 import { Exercise } from "../../../domain/entities/exercise/Exercise";
 import { ExercisesRepo } from "../../../domain/repos/ExercisesRepo.port";
 

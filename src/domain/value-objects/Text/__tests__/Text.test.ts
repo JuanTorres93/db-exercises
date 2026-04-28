@@ -1,9 +1,10 @@
-import { ValidationError } from '@/domain/common/errors';
-import { Text } from '../Text';
+import { ValidationError } from "@/domain/common/domainErrors";
 
-describe('Text', () => {
-  it('should create a valid Text', async () => {
-    const textValue = 'Example of valid text';
+import { Text } from "../Text";
+
+describe("Text", () => {
+  it("should create a valid Text", async () => {
+    const textValue = "Example of valid text";
 
     const text = Text.create(textValue);
 
@@ -11,24 +12,24 @@ describe('Text', () => {
     expect(text.value).toBe(textValue);
   });
 
-  it('should throw validation error if text is not a string', async () => {
+  it("should throw validation error if text is not a string", async () => {
     // @ts-expect-error testing invalid input
     expect(() => Text.create(123)).toThrow(ValidationError);
     // @ts-expect-error testing invalid input
     expect(() => Text.create(123)).toThrow(/string/);
   });
 
-  it('should trim whitespace from the text value', async () => {
-    const textValue = '   Text with whitespace   ';
-    const trimmedValue = 'Text with whitespace';
+  it("should trim whitespace from the text value", async () => {
+    const textValue = "   Text with whitespace   ";
+    const trimmedValue = "Text with whitespace";
 
     const text = Text.create(textValue);
 
     expect(text.value).toBe(trimmedValue);
   });
 
-  it('should respect maxLength value', async () => {
-    const longText = 'a'.repeat(1001);
+  it("should respect maxLength value", async () => {
+    const longText = "a".repeat(1001);
     const maxLength = 20;
     const options = { maxLength };
 
@@ -36,8 +37,8 @@ describe('Text', () => {
     expect(() => Text.create(longText, options)).toThrow(/length.*exceed/);
   });
 
-  it('should throw error if not empty text is allowed', async () => {
-    const emptyText = '';
+  it("should throw error if not empty text is allowed", async () => {
+    const emptyText = "";
     const options = { canBeEmpty: false };
 
     expect(() => Text.create(emptyText, options)).toThrow(ValidationError);

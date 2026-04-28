@@ -1,4 +1,7 @@
-import { AlreadyExistsError, ValidationError } from "@/domain/common/errors";
+import {
+  AlreadyExistsError,
+  ValidationError,
+} from "@/domain/common/domainErrors";
 import { Exercise } from "@/domain/entities/exercise/Exercise";
 import { MemoryExercisesRepo } from "@/infra/repos/memory/MemoryExercisesRepo";
 import { CryptoUUIDIdGenerator } from "@/infra/services/CryptoUUIDIdGenerator/CryptoUUIDIdGenerator";

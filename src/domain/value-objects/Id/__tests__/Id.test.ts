@@ -1,4 +1,4 @@
-import { ValidationError } from "@/domain/common/errors";
+import { ValidationError } from "@/domain/common/domainErrors";
 
 import { Id } from "../Id";
 

@@ -2,7 +2,7 @@ import {
   ExerciseDTO,
   toExerciseDTO,
 } from "@/application-layer/dtos/ExerciseDTO";
-import { NotFoundError, PermissionError } from "@/domain/common/errors";
+import { NotFoundError, PermissionError } from "@/domain/common/domainErrors";
 import { Exercise } from "@/domain/entities/exercise/Exercise";
 import { ExercisesRepo } from "@/domain/repos/ExercisesRepo.port";
 

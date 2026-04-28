@@ -1,5 +1,6 @@
-import { ValueObject } from '../ValueObject';
-import { ValidationError } from '@/domain/common/errors';
+import { ValidationError } from "@/domain/common/domainErrors";
+
+import { ValueObject } from "../ValueObject";
 
 type TextProps = {
   value: string;
@@ -20,8 +21,8 @@ export class Text extends ValueObject<TextProps> {
   }
 
   public static create(value: string, options?: TextOptions) {
-    if (typeof value !== 'string' || value === null || value === undefined)
-      throw new ValidationError('Text: value must be a string');
+    if (typeof value !== "string" || value === null || value === undefined)
+      throw new ValidationError("Text: value must be a string");
 
     if (options?.maxLength) {
       if (value.length > options.maxLength) {
@@ -31,8 +32,8 @@ export class Text extends ValueObject<TextProps> {
       }
     }
 
-    if (options?.canBeEmpty === false && value.trim() === '') {
-      throw new ValidationError('Text: value cannot be empty');
+    if (options?.canBeEmpty === false && value.trim() === "") {
+      throw new ValidationError("Text: value cannot be empty");
     }
 
     return new Text({ value: value.trim() });

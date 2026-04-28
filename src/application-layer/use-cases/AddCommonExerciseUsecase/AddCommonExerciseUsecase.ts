@@ -3,7 +3,7 @@ import {
   toExerciseDTO,
 } from "@/application-layer/dtos/ExerciseDTO";
 import { IdGenerator } from "@/application-layer/services/IdGenerator.port";
-import { AlreadyExistsError } from "@/domain/common/errors";
+import { AlreadyExistsError } from "@/domain/common/domainErrors";
 import { Exercise } from "@/domain/entities/exercise/Exercise";
 import { ExercisesRepo } from "@/domain/repos/ExercisesRepo.port";
 

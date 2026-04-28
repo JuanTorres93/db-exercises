@@ -13,7 +13,7 @@ import {
   NotFoundError,
   PermissionError,
   ValidationError,
-} from "../../../domain/common/errors";
+} from "../../../domain/common/domainErrors";
 import { AppAddExerciseForUserUsecase } from "../../../interface-adapters/use-cases/AppAddExerciseForUserUsecase";
 import { JSENDFailure, JSENDSuccess } from "../common/JSEND";
 

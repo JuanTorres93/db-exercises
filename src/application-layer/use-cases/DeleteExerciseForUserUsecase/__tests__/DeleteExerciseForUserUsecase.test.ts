@@ -1,4 +1,4 @@
-import { NotFoundError, PermissionError } from "@/domain/common/errors";
+import { NotFoundError, PermissionError } from "@/domain/common/domainErrors";
 import { Exercise } from "@/domain/entities/exercise/Exercise";
 import { MemoryExercisesRepo } from "@/infra/repos/memory/MemoryExercisesRepo";
 

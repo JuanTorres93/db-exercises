@@ -1,5 +1,6 @@
-import { ValueObject } from '../ValueObject';
-import { ValidationError } from '@/domain/common/errors';
+import { ValidationError } from "@/domain/common/domainErrors";
+
+import { ValueObject } from "../ValueObject";
 
 type IdProps = {
   value: string;
@@ -15,13 +16,13 @@ export class Id extends ValueObject<IdProps> {
   }
 
   public static create(value: string) {
-    if (!value) throw new ValidationError('Id: value cannot be empty');
+    if (!value) throw new ValidationError("Id: value cannot be empty");
 
-    if (typeof value !== 'string')
-      throw new ValidationError('Id: value must be a string');
+    if (typeof value !== "string")
+      throw new ValidationError("Id: value must be a string");
 
-    if (value.trim() === '')
-      throw new ValidationError('Id: value cannot be empty');
+    if (value.trim() === "")
+      throw new ValidationError("Id: value cannot be empty");
 
     return new Id({ value: value.trim() });
   }

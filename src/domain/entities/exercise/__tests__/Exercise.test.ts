@@ -1,5 +1,5 @@
 import { validExerciseProps as vp } from "@/../tests/createProps/exerciseTestProps";
-import { ValidationError } from "@/domain/common/errors";
+import { ValidationError } from "@/domain/common/domainErrors";
 
 import { Exercise, ExerciseCreateProps } from "../Exercise";
 

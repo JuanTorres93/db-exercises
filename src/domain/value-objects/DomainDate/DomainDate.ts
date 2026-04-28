@@ -1,5 +1,6 @@
-import { ValueObject } from '../ValueObject';
-import { ValidationError } from '@/domain/common/errors';
+import { ValidationError } from "@/domain/common/domainErrors";
+
+import { ValueObject } from "../ValueObject";
 
 type DomainDateProps = {
   value: Date;

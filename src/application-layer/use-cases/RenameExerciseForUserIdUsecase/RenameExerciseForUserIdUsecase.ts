@@ -6,7 +6,7 @@ import {
   AlreadyExistsError,
   NotFoundError,
   PermissionError,
-} from "@/domain/common/errors";
+} from "@/domain/common/domainErrors";
 import { ExercisesRepo } from "@/domain/repos/ExercisesRepo.port";
 
 export type RenameExerciseForUserIdUsecaseRequest = {
