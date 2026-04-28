@@ -1,6 +1,6 @@
 import { NotFoundApplicationError } from "@/application-layer/common/applicationErrors";
 import { AlreadyExistsApplicationError } from "@/application-layer/common/applicationErrors";
-import { PermissionError } from "@/domain/common/domainErrors";
+import { PermissionApplicationError } from "@/application-layer/common/applicationErrors";
 import { Exercise } from "@/domain/entities/exercise/Exercise";
 import { MemoryExercisesRepo } from "@/infra/repos/memory/MemoryExercisesRepo";
 
@@ -91,7 +91,7 @@ describe("RenameExerciseForUserIdUsecase", () => {
           userId: "other-user",
           newName: "New Name",
         }),
-      ).rejects.toThrow(PermissionError);
+      ).rejects.toThrow(PermissionApplicationError);
 
       await expect(() =>
         usecase.execute({

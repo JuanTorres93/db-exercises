@@ -8,3 +8,5 @@ export function isApplicationError(err: Error) {
 export class NotFoundApplicationError extends DomainError {}
 
 export class AlreadyExistsApplicationError extends DomainError {}
+
+export class PermissionApplicationError extends DomainError {}

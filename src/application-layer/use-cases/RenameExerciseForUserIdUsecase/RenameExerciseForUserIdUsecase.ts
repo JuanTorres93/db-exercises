@@ -1,10 +1,10 @@
 import { NotFoundApplicationError } from "@/application-layer/common/applicationErrors";
 import { AlreadyExistsApplicationError } from "@/application-layer/common/applicationErrors";
+import { PermissionApplicationError } from "@/application-layer/common/applicationErrors";
 import {
   ExerciseDTO,
   toExerciseDTO,
 } from "@/application-layer/dtos/ExerciseDTO";
-import { PermissionError } from "@/domain/common/domainErrors";
 import { ExercisesRepo } from "@/domain/repos/ExercisesRepo.port";
 
 export type RenameExerciseForUserIdUsecaseRequest = {
@@ -32,7 +32,7 @@ export class RenameExerciseForUserIdUsecase {
     }
 
     if (exercise.userId !== request.userId) {
-      throw new PermissionError(
+      throw new PermissionApplicationError(
         `RenameExerciseForUserIdUsecase: Exercise with id "${request.exerciseId}" does not belong to user "${request.userId}"`,
       );
     }

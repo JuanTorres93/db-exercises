@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import { NotFoundApplicationError } from "@/application-layer/common/applicationErrors";
 import { AlreadyExistsApplicationError } from "@/application-layer/common/applicationErrors";
+import { PermissionApplicationError } from "@/application-layer/common/applicationErrors";
 import { DeleteExerciseForUserUsecaseRequest } from "@/application-layer/use-cases/DeleteExerciseForUserUsecase/DeleteExerciseForUserUsecase";
 import { GetExercisesByFuzzyNameUsecaseRequest } from "@/application-layer/use-cases/GetExercisesByFuzzyNameUsecase/GetExercisesByFuzzyNameUsecase";
 import { RenameExerciseForUserIdUsecaseRequest } from "@/application-layer/use-cases/RenameExerciseForUserIdUsecase/RenameExerciseForUserIdUsecase";
@@ -10,10 +11,7 @@ import { AppGetExercisesByFuzzyNameUsecase } from "@/interface-adapters/use-case
 import { AppRenameExerciseForUserIdUsecase } from "@/interface-adapters/use-cases/AppRenameExerciseForUserIdUsecase";
 
 import { AddExerciseForUserUsecaseRequest } from "../../../application-layer/use-cases/AddExerciseForUserUsecase/AddExerciseForUserUsecase";
-import {
-  PermissionError,
-  ValidationError,
-} from "../../../domain/common/domainErrors";
+import { ValidationError } from "../../../domain/common/domainErrors";
 import { AppAddExerciseForUserUsecase } from "../../../interface-adapters/use-cases/AppAddExerciseForUserUsecase";
 import { JSENDFailure, JSENDSuccess } from "../common/JSEND";
 
@@ -98,7 +96,7 @@ export async function renameExercise(
 
     if (
       error instanceof NotFoundApplicationError ||
-      error instanceof PermissionError
+      error instanceof PermissionApplicationError
     ) {
       jsend.data = {
         exerciseId: "The exercise does not exist",

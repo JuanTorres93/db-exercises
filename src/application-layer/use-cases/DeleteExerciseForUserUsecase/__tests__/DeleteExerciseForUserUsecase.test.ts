@@ -1,5 +1,5 @@
 import { NotFoundApplicationError } from "@/application-layer/common/applicationErrors";
-import { PermissionError } from "@/domain/common/domainErrors";
+import { PermissionApplicationError } from "@/application-layer/common/applicationErrors";
 import { Exercise } from "@/domain/entities/exercise/Exercise";
 import { MemoryExercisesRepo } from "@/infra/repos/memory/MemoryExercisesRepo";
 
