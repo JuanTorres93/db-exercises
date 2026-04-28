@@ -9,7 +9,6 @@ import {
 
 const router = express.Router();
 
-// TODO Create middleware to validate the request body and return appropriate JSEND fail response if the body is invalid
 router.post("/", createNewExercise);
 
 router.get("/:fuzzyName", getExercisesByFuzzyName);
