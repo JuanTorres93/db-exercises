@@ -12,21 +12,12 @@ import { ValidationDomainError } from "@/domain/common/domainErrors";
 
 import { JSENDFailure } from "./JSEND";
 
-function getStatusForApplicationError(err: ApplicationError): number {
-  if (err instanceof AlreadyExistsApplicationError) return 409;
-  if (err instanceof NotFoundApplicationError) return 404;
-  if (err instanceof PermissionApplicationError) return 409;
-  if (err instanceof ValidationApplicationError) return 400;
-
-  return 500;
-}
-
-export const handleKnownErrors: ErrorRequestHandler = (
+export function handleKnownErrors(
   err: Error,
   _req: Request,
   res: Response,
   next: NextFunction,
-) => {
+): ReturnType<ErrorRequestHandler> {
   const jsend: JSENDFailure = {
     status: "fail",
     data: {},
@@ -47,4 +38,13 @@ export const handleKnownErrors: ErrorRequestHandler = (
   }
 
   next(err);
-};
+}
+
+function getStatusForApplicationError(err: ApplicationError): number {
+  if (err instanceof AlreadyExistsApplicationError) return 409;
+  if (err instanceof NotFoundApplicationError) return 404;
+  if (err instanceof PermissionApplicationError) return 409;
+  if (err instanceof ValidationApplicationError) return 400;
+
+  return 500;
+}
