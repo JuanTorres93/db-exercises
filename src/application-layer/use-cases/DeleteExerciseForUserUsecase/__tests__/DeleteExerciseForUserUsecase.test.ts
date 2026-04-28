@@ -1,4 +1,5 @@
-import { NotFoundError, PermissionError } from "@/domain/common/domainErrors";
+import { NotFoundApplicationError } from "@/application-layer/common/applicationErrors";
+import { PermissionError } from "@/domain/common/domainErrors";
 import { Exercise } from "@/domain/entities/exercise/Exercise";
 import { MemoryExercisesRepo } from "@/infra/repos/memory/MemoryExercisesRepo";
 
@@ -62,7 +63,7 @@ describe("DeleteExerciseForUserUsecase", () => {
           exerciseId: "non-existent-id",
           userId: exercise.userId!,
         }),
-      ).rejects.toThrow(NotFoundError);
+      ).rejects.toThrow(NotFoundApplicationError);
 
       await expect(() =>
         usecase.execute({
@@ -78,7 +79,7 @@ describe("DeleteExerciseForUserUsecase", () => {
           exerciseId: exercise.id,
           userId: "other-user",
         }),
-      ).rejects.toThrow(NotFoundError);
+      ).rejects.toThrow(NotFoundApplicationError);
 
       await expect(() =>
         usecase.execute({

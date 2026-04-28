@@ -1,6 +1,6 @@
+import { NotFoundApplicationError } from "@/application-layer/common/applicationErrors";
 import {
   AlreadyExistsError,
-  NotFoundError,
   PermissionError,
 } from "@/domain/common/domainErrors";
 import { Exercise } from "@/domain/entities/exercise/Exercise";
@@ -75,7 +75,7 @@ describe("RenameExerciseForUserIdUsecase", () => {
           userId: exercise.userId!,
           newName: "New Name",
         }),
-      ).rejects.toThrow(NotFoundError);
+      ).rejects.toThrow(NotFoundApplicationError);
 
       await expect(() =>
         usecase.execute({

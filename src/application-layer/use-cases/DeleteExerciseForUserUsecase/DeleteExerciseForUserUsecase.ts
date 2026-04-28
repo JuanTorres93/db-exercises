@@ -1,8 +1,9 @@
+import { NotFoundApplicationError } from "@/application-layer/common/applicationErrors";
 import {
   ExerciseDTO,
   toExerciseDTO,
 } from "@/application-layer/dtos/ExerciseDTO";
-import { NotFoundError, PermissionError } from "@/domain/common/domainErrors";
+import { PermissionError } from "@/domain/common/domainErrors";
 import { Exercise } from "@/domain/entities/exercise/Exercise";
 import { ExercisesRepo } from "@/domain/repos/ExercisesRepo.port";
 
@@ -20,7 +21,7 @@ export class DeleteExerciseForUserUsecase {
     const exercise = await this.exercisesRepo.getById(request.exerciseId);
 
     if (!exerciseExistsAndBelongsToUser(exercise, request.userId)) {
-      throw new NotFoundError(
+      throw new NotFoundApplicationError(
         `DeleteExerciseForUserUsecase: Exercise with id "${request.exerciseId}" not found`,
       );
     }

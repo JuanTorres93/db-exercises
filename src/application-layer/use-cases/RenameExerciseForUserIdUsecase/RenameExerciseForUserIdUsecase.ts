@@ -1,10 +1,10 @@
+import { NotFoundApplicationError } from "@/application-layer/common/applicationErrors";
 import {
   ExerciseDTO,
   toExerciseDTO,
 } from "@/application-layer/dtos/ExerciseDTO";
 import {
   AlreadyExistsError,
-  NotFoundError,
   PermissionError,
 } from "@/domain/common/domainErrors";
 import { ExercisesRepo } from "@/domain/repos/ExercisesRepo.port";
@@ -28,7 +28,7 @@ export class RenameExerciseForUserIdUsecase {
     ]);
 
     if (!exercise) {
-      throw new NotFoundError(
+      throw new NotFoundApplicationError(
         `RenameExerciseForUserIdUsecase: Exercise with id "${request.exerciseId}" not found`,
       );
     }

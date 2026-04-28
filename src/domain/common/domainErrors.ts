@@ -6,8 +6,6 @@ export function isDomainError(err: Error) {
 
 export class ValidationError extends DomainError {}
 
-export class NotFoundError extends DomainError {}
-
 export class AlreadyExistsError extends DomainError {}
 
 export class AuthError extends DomainError {}

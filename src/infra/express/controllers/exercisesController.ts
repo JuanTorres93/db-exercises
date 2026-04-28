@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
+import { NotFoundApplicationError } from "@/application-layer/common/applicationErrors";
 import { DeleteExerciseForUserUsecaseRequest } from "@/application-layer/use-cases/DeleteExerciseForUserUsecase/DeleteExerciseForUserUsecase";
 import { GetExercisesByFuzzyNameUsecaseRequest } from "@/application-layer/use-cases/GetExercisesByFuzzyNameUsecase/GetExercisesByFuzzyNameUsecase";
 import { RenameExerciseForUserIdUsecaseRequest } from "@/application-layer/use-cases/RenameExerciseForUserIdUsecase/RenameExerciseForUserIdUsecase";
@@ -10,7 +11,6 @@ import { AppRenameExerciseForUserIdUsecase } from "@/interface-adapters/use-case
 import { AddExerciseForUserUsecaseRequest } from "../../../application-layer/use-cases/AddExerciseForUserUsecase/AddExerciseForUserUsecase";
 import {
   AlreadyExistsError,
-  NotFoundError,
   PermissionError,
   ValidationError,
 } from "../../../domain/common/domainErrors";
@@ -96,7 +96,10 @@ export async function renameExercise(
       return res.status(409).json(jsend);
     }
 
-    if (error instanceof NotFoundError || error instanceof PermissionError) {
+    if (
+      error instanceof NotFoundApplicationError ||
+      error instanceof PermissionError
+    ) {
       jsend.data = {
         exerciseId: "The exercise does not exist",
       };
@@ -136,7 +139,7 @@ export async function deleteExercise(
       data: {},
     };
 
-    if (error instanceof NotFoundError) {
+    if (error instanceof NotFoundApplicationError) {
       jsend.data = {
         exerciseId: "The exercise does not exist",
       };
