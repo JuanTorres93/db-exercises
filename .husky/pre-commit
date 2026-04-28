@@ -1,1 +1,1 @@
-npm run test-husky
+npm run test-husky && npm run build
