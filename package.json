@@ -9,7 +9,9 @@
     "start": "NODE_ENV=production node dist/server.js",
     "test": "vitest run -w",
     "test-husky": "vitest",
-    "prepare": "husky"
+    "prepare": "husky",
+    "seed-dev": "NODE_ENV=development tsx scripts/seedCommonExercises.ts",
+    "seed-prod": "NODE_ENV=production tsx scripts/seedCommonExercises.ts"
   },
   "keywords": [],
   "author": "",
