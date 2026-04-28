@@ -1,5 +1,5 @@
 import { AlreadyExistsApplicationError } from "@/application-layer/common/applicationErrors";
-import { ValidationError } from "@/domain/common/domainErrors";
+import { ValidationDomainError } from "@/domain/common/domainErrors";
 import { Exercise } from "@/domain/entities/exercise/Exercise";
 import { MemoryExercisesRepo } from "@/infra/repos/memory/MemoryExercisesRepo";
 import { CryptoUUIDIdGenerator } from "@/infra/services/CryptoUUIDIdGenerator/CryptoUUIDIdGenerator";
@@ -79,7 +79,7 @@ describe("AddExerciseForUserUsecase", () => {
           name: exercise.name,
           userId: "",
         }),
-      ).rejects.toThrow(ValidationError);
+      ).rejects.toThrow(ValidationDomainError);
 
       await expect(() =>
         usecase.execute({

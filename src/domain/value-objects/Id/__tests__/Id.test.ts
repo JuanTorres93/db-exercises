@@ -1,4 +1,4 @@
-import { ValidationError } from "@/domain/common/domainErrors";
+import { ValidationDomainError } from "@/domain/common/domainErrors";
 
 import { Id } from "../Id";
 
@@ -17,7 +17,7 @@ describe("Id", () => {
 
     expect(() => {
       Id.create(idValue);
-    }).toThrow(ValidationError);
+    }).toThrow(ValidationDomainError);
     expect(() => {
       Id.create(idValue);
     }).toThrow(/empty/i);
@@ -28,7 +28,7 @@ describe("Id", () => {
 
     expect(() => {
       Id.create(idValue);
-    }).toThrow(ValidationError);
+    }).toThrow(ValidationDomainError);
     expect(() => {
       Id.create(idValue);
     }).toThrow(/empty/i);
@@ -40,7 +40,7 @@ describe("Id", () => {
     expect(() => {
       // @ts-expect-error testing invalid type
       Id.create(idValue);
-    }).toThrow(ValidationError);
+    }).toThrow(ValidationDomainError);
 
     expect(() => {
       // @ts-expect-error testing invalid type
@@ -54,7 +54,7 @@ describe("Id", () => {
     expect(() => {
       // @ts-expect-error testing invalid type
       Id.create(idValue);
-    }).toThrow(ValidationError);
+    }).toThrow(ValidationDomainError);
 
     expect(() => {
       // @ts-expect-error testing invalid type
@@ -68,7 +68,7 @@ describe("Id", () => {
     expect(() => {
       // @ts-expect-error testing invalid type
       Id.create(idValue);
-    }).toThrow(ValidationError);
+    }).toThrow(ValidationDomainError);
 
     expect(() => {
       // @ts-expect-error testing invalid type
@@ -82,7 +82,7 @@ describe("Id", () => {
     expect(() => {
       // @ts-expect-error testing invalid type
       Id.create(idValue);
-    }).toThrow(ValidationError);
+    }).toThrow(ValidationDomainError);
 
     expect(() => {
       // @ts-expect-error testing invalid type
@@ -96,7 +96,7 @@ describe("Id", () => {
     expect(() => {
       // @ts-expect-error testing invalid type
       Id.create(idValue);
-    }).toThrow(ValidationError);
+    }).toThrow(ValidationDomainError);
 
     expect(() => {
       // @ts-expect-error testing invalid type
@@ -110,7 +110,7 @@ describe("Id", () => {
     expect(() => {
       // @ts-expect-error testing invalid type
       Id.create(idValue);
-    }).toThrow(ValidationError);
+    }).toThrow(ValidationDomainError);
 
     expect(() => {
       // @ts-expect-error testing invalid type

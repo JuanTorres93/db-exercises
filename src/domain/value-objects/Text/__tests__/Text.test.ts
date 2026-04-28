@@ -1,4 +1,4 @@
-import { ValidationError } from "@/domain/common/domainErrors";
+import { ValidationDomainError } from "@/domain/common/domainErrors";
 
 import { Text } from "../Text";
 
@@ -14,7 +14,7 @@ describe("Text", () => {
 
   it("should throw validation error if text is not a string", async () => {
     // @ts-expect-error testing invalid input
-    expect(() => Text.create(123)).toThrow(ValidationError);
+    expect(() => Text.create(123)).toThrow(ValidationDomainError);
     // @ts-expect-error testing invalid input
     expect(() => Text.create(123)).toThrow(/string/);
   });
@@ -33,7 +33,7 @@ describe("Text", () => {
     const maxLength = 20;
     const options = { maxLength };
 
-    expect(() => Text.create(longText, options)).toThrow(ValidationError);
+    expect(() => Text.create(longText, options)).toThrow(ValidationDomainError);
     expect(() => Text.create(longText, options)).toThrow(/length.*exceed/);
   });
 
@@ -41,7 +41,9 @@ describe("Text", () => {
     const emptyText = "";
     const options = { canBeEmpty: false };
 
-    expect(() => Text.create(emptyText, options)).toThrow(ValidationError);
+    expect(() => Text.create(emptyText, options)).toThrow(
+      ValidationDomainError,
+    );
     expect(() => Text.create(emptyText, options)).toThrow(/cannot be empty/);
   });
 });

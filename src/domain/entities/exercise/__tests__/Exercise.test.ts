@@ -1,5 +1,5 @@
 import { validExerciseProps as vp } from "@/../tests/createProps/exerciseTestProps";
-import { ValidationError } from "@/domain/common/domainErrors";
+import { ValidationDomainError } from "@/domain/common/domainErrors";
 
 import { Exercise, ExerciseCreateProps } from "../Exercise";
 
@@ -76,7 +76,7 @@ describe("Exercise", () => {
       const longName = "a".repeat(101);
 
       expect(() => Exercise.create({ ...vp, name: longName })).toThrow(
-        ValidationError,
+        ValidationDomainError,
       );
       expect(() => Exercise.create({ ...vp, name: longName })).toThrow(
         /^Text:.*/,

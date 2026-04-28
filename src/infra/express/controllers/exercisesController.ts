@@ -11,7 +11,7 @@ import { AppGetExercisesByFuzzyNameUsecase } from "@/interface-adapters/use-case
 import { AppRenameExerciseForUserIdUsecase } from "@/interface-adapters/use-cases/AppRenameExerciseForUserIdUsecase";
 
 import { AddExerciseForUserUsecaseRequest } from "../../../application-layer/use-cases/AddExerciseForUserUsecase/AddExerciseForUserUsecase";
-import { ValidationError } from "../../../domain/common/domainErrors";
+import { ValidationDomainError } from "../../../domain/common/domainErrors";
 import { AppAddExerciseForUserUsecase } from "../../../interface-adapters/use-cases/AppAddExerciseForUserUsecase";
 import { JSENDFailure, JSENDSuccess } from "../common/JSEND";
 
@@ -46,7 +46,7 @@ export async function createNewExercise(
       return res.status(409).json(jsend);
     }
 
-    if (error instanceof ValidationError) {
+    if (error instanceof ValidationDomainError) {
       jsend.data = {
         userId: "A userId is required",
       };

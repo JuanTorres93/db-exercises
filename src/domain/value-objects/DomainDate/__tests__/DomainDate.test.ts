@@ -1,4 +1,4 @@
-import { ValidationError } from "@/domain/common/domainErrors";
+import { ValidationDomainError } from "@/domain/common/domainErrors";
 
 import { DomainDate } from "../DomainDate";
 
@@ -41,7 +41,7 @@ describe("DomainDate", () => {
   it("should throw validation error if date is invalid", () => {
     const invalidDate = new Date("invalid date string");
 
-    expect(() => DomainDate.create(invalidDate)).toThrow(ValidationError);
+    expect(() => DomainDate.create(invalidDate)).toThrow(ValidationDomainError);
     expect(() => DomainDate.create(invalidDate)).toThrow(
       /date must be a valid date/,
     );
@@ -49,7 +49,9 @@ describe("DomainDate", () => {
 
   it("should throw validation error if value is not a Date instance", () => {
     // @ts-expect-error testing invalid input
-    expect(() => DomainDate.create("2024-01-15")).toThrow(ValidationError);
+    expect(() => DomainDate.create("2024-01-15")).toThrow(
+      ValidationDomainError,
+    );
     // @ts-expect-error testing invalid input
     expect(() => DomainDate.create("2024-01-15")).toThrow(
       /date must be a valid date/,
@@ -58,7 +60,7 @@ describe("DomainDate", () => {
 
   it("should throw validation error if value is a number", () => {
     // @ts-expect-error testing invalid input
-    expect(() => DomainDate.create(1234567890)).toThrow(ValidationError);
+    expect(() => DomainDate.create(1234567890)).toThrow(ValidationDomainError);
     // @ts-expect-error testing invalid input
     expect(() => DomainDate.create(1234567890)).toThrow(
       /date must be a valid date/,
@@ -68,7 +70,7 @@ describe("DomainDate", () => {
   it("should include context in error message when provided", () => {
     const invalidDate = new Date("invalid");
 
-    expect(() => DomainDate.create(invalidDate)).toThrow(ValidationError);
+    expect(() => DomainDate.create(invalidDate)).toThrow(ValidationDomainError);
     expect(() => DomainDate.create(invalidDate)).toThrow(
       /DomainDate: date must be a valid date/,
     );

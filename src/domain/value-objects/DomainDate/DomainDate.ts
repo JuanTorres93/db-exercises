@@ -1,4 +1,4 @@
-import { ValidationError } from "@/domain/common/domainErrors";
+import { ValidationDomainError } from "@/domain/common/domainErrors";
 
 import { ValueObject } from "../ValueObject";
 
@@ -20,7 +20,9 @@ export class DomainDate extends ValueObject<DomainDateProps> {
 
     if (value) {
       if (!(value instanceof Date) || isNaN(value.getTime())) {
-        throw new ValidationError(`DomainDate: date must be a valid date`);
+        throw new ValidationDomainError(
+          `DomainDate: date must be a valid date`,
+        );
       }
 
       return new DomainDate({ value });

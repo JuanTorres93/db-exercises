@@ -1,4 +1,4 @@
-import { ValidationError } from "@/domain/common/domainErrors";
+import { ValidationDomainError } from "@/domain/common/domainErrors";
 
 import { ValueObject } from "../ValueObject";
 
@@ -22,18 +22,18 @@ export class Text extends ValueObject<TextProps> {
 
   public static create(value: string, options?: TextOptions) {
     if (typeof value !== "string" || value === null || value === undefined)
-      throw new ValidationError("Text: value must be a string");
+      throw new ValidationDomainError("Text: value must be a string");
 
     if (options?.maxLength) {
       if (value.length > options.maxLength) {
-        throw new ValidationError(
+        throw new ValidationDomainError(
           `Text: value length must not exceed ${options.maxLength} characters`,
         );
       }
     }
 
     if (options?.canBeEmpty === false && value.trim() === "") {
-      throw new ValidationError("Text: value cannot be empty");
+      throw new ValidationDomainError("Text: value cannot be empty");
     }
 
     return new Text({ value: value.trim() });

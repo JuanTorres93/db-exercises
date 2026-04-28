@@ -4,4 +4,4 @@ export function isDomainError(err: Error) {
   return err instanceof DomainError;
 }
 
-export class ValidationError extends DomainError {}
+export class ValidationDomainError extends DomainError {}
