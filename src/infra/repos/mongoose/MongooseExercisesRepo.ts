@@ -16,25 +16,27 @@ export class MongooseExercisesRepo implements ExercisesRepo {
     userId: string,
     pagination?: PaginationParams,
   ): Promise<Exercise[]> {
-    const docs = await ExerciseMongo.find({ userId }).lean();
+    const query = ExerciseMongo.find({ userId });
+    this.paginate(query, pagination);
 
-    const exercises = docs.map((doc) => toExercise(doc as ExerciseDTO));
+    const docs = await query.lean();
 
-    return this.paginate(exercises, pagination);
+    return docs.map((doc) => toExercise(doc as ExerciseDTO));
   }
 
   async getCommonExercisesByFuzzyName(
     name: string,
     pagination?: PaginationParams,
   ): Promise<Exercise[]> {
-    const docs = await ExerciseMongo.find({
+    const query = ExerciseMongo.find({
       userId: { $exists: false },
       name: { $regex: escapeRegex(name), $options: "i" },
-    }).lean();
+    });
+    this.paginate(query, pagination);
 
-    const exercises = docs.map((doc) => toExercise(doc as ExerciseDTO));
+    const docs = await query.lean();
 
-    return this.paginate(exercises, pagination);
+    return docs.map((doc) => toExercise(doc as ExerciseDTO));
   }
 
   async getCommonExerciseByName(name: string): Promise<Exercise | null> {
@@ -63,14 +65,15 @@ export class MongooseExercisesRepo implements ExercisesRepo {
     userId: string,
     pagination?: PaginationParams,
   ): Promise<Exercise[]> {
-    const docs = await ExerciseMongo.find({
+    const query = ExerciseMongo.find({
       userId,
       name: { $regex: escapeRegex(name), $options: "i" },
-    }).lean();
+    });
+    this.paginate(query, pagination);
 
-    const exercises = docs.map((doc) => toExercise(doc as ExerciseDTO));
+    const docs = await query.lean();
 
-    return this.paginate(exercises, pagination);
+    return docs.map((doc) => toExercise(doc as ExerciseDTO));
   }
 
   async save(exercise: Exercise): Promise<Exercise> {
@@ -90,14 +93,15 @@ export class MongooseExercisesRepo implements ExercisesRepo {
     return doc ? toExercise(doc as ExerciseDTO) : null;
   }
 
-  private paginate<T>(items: T[], pagination?: PaginationParams): T[] {
-    if (!pagination) return items;
+  private paginate(
+    query: ReturnType<typeof ExerciseMongo.find>,
+    pagination?: PaginationParams,
+  ): void {
+    if (!pagination) return;
 
     const { page, limit } = pagination;
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + limit;
 
-    return items.slice(startIndex, endIndex);
+    query.skip((page - 1) * limit).limit(limit);
   }
 }
 
