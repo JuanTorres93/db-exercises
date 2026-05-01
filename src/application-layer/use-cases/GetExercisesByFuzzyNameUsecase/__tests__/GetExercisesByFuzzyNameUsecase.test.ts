@@ -88,5 +88,16 @@ describe("GetExercisesByFuzzyNameUsecase", () => {
         expect(resultIds).not.toContain(exercise.id);
       });
     });
+
+    it("can paginate results", async () => {
+      const result = await usecase.execute({
+        name: "Exercise",
+        userId: USER_ONE_ID,
+        page: 1,
+        limit: 2,
+      });
+
+      expect(result.length).toBe(2);
+    });
   });
 });
