@@ -1,6 +1,7 @@
 import { ExerciseDTO, toExercise } from "@/application-layer/dtos/ExerciseDTO";
 import { Exercise } from "@/domain/entities/exercise/Exercise";
 import { ExercisesRepo } from "@/domain/repos/ExercisesRepo.port";
+import { PaginationParams } from "@/domain/repos/common/pagination";
 
 import ExerciseMongo from "./models/ExerciseMongo";
 
@@ -13,27 +14,27 @@ export class MongooseExercisesRepo implements ExercisesRepo {
 
   async getByUserId(
     userId: string,
-    pagination?: { page: number; limit: number },
+    pagination?: PaginationParams,
   ): Promise<Exercise[]> {
-    const query = ExerciseMongo.find({ userId }).lean();
+    const docs = await ExerciseMongo.find({ userId }).lean();
 
-    if (pagination) {
-      const { page, limit } = pagination;
-      query.skip((page - 1) * limit).limit(limit);
-    }
+    const exercises = docs.map((doc) => toExercise(doc as ExerciseDTO));
 
-    const docs = await query;
-
-    return docs.map((doc) => toExercise(doc as ExerciseDTO));
+    return this.paginate(exercises, pagination);
   }
 
-  async getCommonExercisesByFuzzyName(name: string): Promise<Exercise[]> {
+  async getCommonExercisesByFuzzyName(
+    name: string,
+    pagination?: PaginationParams,
+  ): Promise<Exercise[]> {
     const docs = await ExerciseMongo.find({
       userId: { $exists: false },
       name: { $regex: escapeRegex(name), $options: "i" },
     }).lean();
 
-    return docs.map((doc) => toExercise(doc as ExerciseDTO));
+    const exercises = docs.map((doc) => toExercise(doc as ExerciseDTO));
+
+    return this.paginate(exercises, pagination);
   }
 
   async getCommonExerciseByName(name: string): Promise<Exercise | null> {
@@ -84,6 +85,16 @@ export class MongooseExercisesRepo implements ExercisesRepo {
     const doc = await ExerciseMongo.findOneAndDelete({ id }).lean();
 
     return doc ? toExercise(doc as ExerciseDTO) : null;
+  }
+
+  private paginate<T>(items: T[], pagination?: PaginationParams): T[] {
+    if (!pagination) return items;
+
+    const { page, limit } = pagination;
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+
+    return items.slice(startIndex, endIndex);
   }
 }
 

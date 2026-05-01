@@ -8,7 +8,10 @@ export interface ExercisesRepo {
     pagination?: PaginationParams,
   ): Promise<Exercise[]>;
 
-  getCommonExercisesByFuzzyName(name: string): Promise<Exercise[]>;
+  getCommonExercisesByFuzzyName(
+    name: string,
+    pagination?: PaginationParams,
+  ): Promise<Exercise[]>;
   getCommonExerciseByName(name: string): Promise<Exercise | null>;
 
   getByNameAndUserId(name: string, userId: string): Promise<Exercise | null>;

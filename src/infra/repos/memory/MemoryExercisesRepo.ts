@@ -19,26 +19,21 @@ export class MemoryExercisesRepo implements ExercisesRepo {
       (exercise) => exercise.userId === userId,
     );
 
-    if (pagination) {
-      const { page, limit } = pagination;
-      const startIndex = (page - 1) * limit;
-      const endIndex = startIndex + limit;
-
-      return exercises.slice(startIndex, endIndex);
-    }
-
-    return exercises;
+    return this.paginate(exercises, pagination);
   }
 
-  async getCommonExercisesByFuzzyName(name: string): Promise<Exercise[]> {
+  async getCommonExercisesByFuzzyName(
+    name: string,
+    pagination?: PaginationParams,
+  ): Promise<Exercise[]> {
     const processedName = name.toLowerCase();
 
-    const exercises = Array.from(this.exercises.values());
-
-    return exercises.filter(
+    const exercises = Array.from(this.exercises.values()).filter(
       (exercise) =>
         !exercise.userId && exercise.name.toLowerCase().includes(processedName),
     );
+
+    return this.paginate(exercises, pagination);
   }
 
   async getCommonExerciseByName(name: string): Promise<Exercise | null> {
@@ -100,6 +95,19 @@ export class MemoryExercisesRepo implements ExercisesRepo {
     this.exercises.delete(id);
 
     return exercise;
+  }
+
+  private paginate(
+    items: Exercise[],
+    pagination?: PaginationParams,
+  ): Exercise[] {
+    if (!pagination) return items;
+
+    const { page, limit } = pagination;
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+
+    return items.slice(startIndex, endIndex);
   }
 
   clearForTesting() {
