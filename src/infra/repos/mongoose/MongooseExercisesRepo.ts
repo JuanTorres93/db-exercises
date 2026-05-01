@@ -11,8 +11,18 @@ export class MongooseExercisesRepo implements ExercisesRepo {
     return doc ? toExercise(doc as ExerciseDTO) : null;
   }
 
-  async getByUserId(userId: string): Promise<Exercise[]> {
-    const docs = await ExerciseMongo.find({ userId }).lean();
+  async getByUserId(
+    userId: string,
+    pagination?: { page: number; limit: number },
+  ): Promise<Exercise[]> {
+    const query = ExerciseMongo.find({ userId }).lean();
+
+    if (pagination) {
+      const { page, limit } = pagination;
+      query.skip((page - 1) * limit).limit(limit);
+    }
+
+    const docs = await query;
 
     return docs.map((doc) => toExercise(doc as ExerciseDTO));
   }

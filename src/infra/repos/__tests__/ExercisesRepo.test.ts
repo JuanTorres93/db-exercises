@@ -84,6 +84,27 @@ repos.forEach(({ name, repoClass }) => {
 
         expect(exercises).toEqual([]);
       });
+
+      it("can paginate results", async () => {
+        const exercisesToAdd = Array.from({ length: 15 }, (_, i) =>
+          createTestExercise({
+            id: `exercise-${i + 2}`,
+            name: `Exercise ${i + 2}`,
+            userId: "user-1",
+          }),
+        );
+
+        for (const exercise of exercisesToAdd) {
+          await repo.save(exercise);
+        }
+
+        const exercises = await repo.getByUserId("user-1", {
+          page: 2,
+          limit: 5,
+        });
+
+        expect(exercises.length).toBe(5);
+      });
     });
 
     describe("getCommonExerciseByFuzzyName", () => {

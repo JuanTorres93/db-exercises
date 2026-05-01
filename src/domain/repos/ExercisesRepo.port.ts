@@ -1,8 +1,12 @@
 import { Exercise } from "../entities/exercise/Exercise";
+import { PaginationParams } from "./common/pagination";
 
 export interface ExercisesRepo {
   getById(id: string): Promise<Exercise | null>;
-  getByUserId(userId: string): Promise<Exercise[]>;
+  getByUserId(
+    userId: string,
+    pagination?: PaginationParams,
+  ): Promise<Exercise[]>;
 
   getCommonExercisesByFuzzyName(name: string): Promise<Exercise[]>;
   getCommonExerciseByName(name: string): Promise<Exercise | null>;

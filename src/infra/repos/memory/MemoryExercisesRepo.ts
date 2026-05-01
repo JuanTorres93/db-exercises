@@ -1,5 +1,6 @@
 import { Exercise } from "@/domain/entities/exercise/Exercise";
 import { ExercisesRepo } from "@/domain/repos/ExercisesRepo.port";
+import { PaginationParams } from "@/domain/repos/common/pagination";
 
 export class MemoryExercisesRepo implements ExercisesRepo {
   private exercises: Map<string, Exercise> = new Map();
@@ -10,10 +11,23 @@ export class MemoryExercisesRepo implements ExercisesRepo {
     return exercise;
   }
 
-  async getByUserId(userId: string): Promise<Exercise[]> {
-    const exercises = Array.from(this.exercises.values());
+  async getByUserId(
+    userId: string,
+    pagination?: PaginationParams,
+  ): Promise<Exercise[]> {
+    const exercises = Array.from(this.exercises.values()).filter(
+      (exercise) => exercise.userId === userId,
+    );
 
-    return exercises.filter((exercise) => exercise.userId === userId);
+    if (pagination) {
+      const { page, limit } = pagination;
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
+
+      return exercises.slice(startIndex, endIndex);
+    }
+
+    return exercises;
   }
 
   async getCommonExercisesByFuzzyName(name: string): Promise<Exercise[]> {
