@@ -1,6 +1,7 @@
 import request from "supertest";
 
 import { AddExerciseForUserUsecaseRequest } from "@/application-layer/use-cases/AddExerciseForUserUsecase/AddExerciseForUserUsecase";
+import { MemoryExercisesRepo } from "@/infra/repos/memory/MemoryExercisesRepo";
 import { AppExercisesRepo } from "@/interface-adapters/repos/AppExercisesRepo";
 
 import { USER_ONE_ID } from "../../../../../tests/seeds/createSeedExercisesNoPersistence";
@@ -9,6 +10,8 @@ import {
   getExistingExercise,
   setupExercisesRouteTests,
 } from "./setupExercisesRouteTests";
+
+const appExercisesRepo = AppExercisesRepo as MemoryExercisesRepo;
 
 describe("POST /exercises", () => {
   setupExercisesRouteTests();
@@ -38,11 +41,11 @@ describe("POST /exercises", () => {
   });
 
   it("should persist new exercise in repo", async () => {
-    const exercisesBefore = AppExercisesRepo.getAllForTesting();
+    const exercisesBefore = appExercisesRepo.getAllForTesting();
 
     await request(app).post("/exercises").send(newUserExerciseBody);
 
-    const exercisesAfter = AppExercisesRepo.getAllForTesting();
+    const exercisesAfter = appExercisesRepo.getAllForTesting();
 
     expect(exercisesAfter.length).toBe(exercisesBefore.length + 1);
   });

@@ -12,11 +12,7 @@ import {
 } from "../../../../tests/seeds/createSeedExercisesNoPersistence";
 
 export async function createExercisesInRepoAndCleanAfterEach() {
-  if (!(AppExercisesRepo instanceof MemoryExercisesRepo)) {
-    throw new Error(
-      "createExercisesInRepo can only be used with MemoryExercisesRepo",
-    );
-  }
+  throwIfNotMemoryRepo(AppExercisesRepo);
 
   AppExercisesRepo.clearForTesting();
 
@@ -41,6 +37,16 @@ export async function createExercisesInRepoAndCleanAfterEach() {
   ]);
 
   afterEach(() => {
+    throwIfNotMemoryRepo(AppExercisesRepo);
+
     AppExercisesRepo.clearForTesting();
   });
+}
+
+export function throwIfNotMemoryRepo(
+  repo: unknown,
+): asserts repo is MemoryExercisesRepo {
+  if (!(repo instanceof MemoryExercisesRepo)) {
+    throw new Error("Expected repo to be an instance of MemoryExercisesRepo");
+  }
 }
