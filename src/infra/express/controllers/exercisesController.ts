@@ -94,15 +94,24 @@ export async function getExercisesByFuzzyName(
 ) {
   try {
     const { fuzzyName } = req.params;
-    const userId = req.query.userId as string;
 
-    const searchData: GetExercisesByFuzzyNameUsecaseRequest = {
+    const userId = req.query.userId as string;
+    const page = req.query.page
+      ? parseInt(req.query.page as string, 10)
+      : undefined;
+    const limit = req.query.limit
+      ? parseInt(req.query.limit as string, 10)
+      : undefined;
+
+    const usecaseRequest: GetExercisesByFuzzyNameUsecaseRequest = {
       name: fuzzyName as string,
       userId,
+      page,
+      limit,
     };
 
     const exercises =
-      await AppGetExercisesByFuzzyNameUsecase.execute(searchData);
+      await AppGetExercisesByFuzzyNameUsecase.execute(usecaseRequest);
 
     const jsend: JSENDSuccess<typeof exercises> = {
       status: "success",

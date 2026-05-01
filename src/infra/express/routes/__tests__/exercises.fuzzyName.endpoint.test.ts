@@ -35,4 +35,13 @@ describe("GET /exercises/:fuzzyName", () => {
     expect(response.status).toBe(200);
     expect(response.body.data).toEqual([]);
   });
+
+  it("can paginate results", async () => {
+    const response = await request(app)
+      .get("/exercises/Exercise")
+      .query({ userId: USER_ONE_ID, page: 1, limit: 2 });
+
+    expect(response.status).toBe(200);
+    expect(response.body.data.length).toBe(2);
+  });
 });
