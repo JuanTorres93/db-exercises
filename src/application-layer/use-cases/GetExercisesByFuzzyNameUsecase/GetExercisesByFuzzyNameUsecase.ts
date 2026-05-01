@@ -20,10 +20,14 @@ export class GetExercisesByFuzzyNameUsecase {
   ): Promise<ExerciseDTO[]> {
     let pagination: PaginationParams | undefined = undefined;
 
+    const userIdProvided = request.userId != null;
+
     if (request.page !== undefined && request.limit !== undefined) {
       // To get exercises correctly limited we need to divide limit by 2, since we are paginating user and common exercises separately and then merging results
 
-      const adjustedLimit = Math.ceil(request.limit / 2);
+      const adjustedLimit = userIdProvided
+        ? Math.ceil(request.limit / 2)
+        : request.limit;
 
       pagination = {
         page: request.page,
@@ -31,12 +35,16 @@ export class GetExercisesByFuzzyNameUsecase {
       };
     }
 
+    const userExercisesPromise = userIdProvided
+      ? this.exercisesRepo.getByFuzzyNameAndUserId(
+          request.name,
+          request.userId,
+          pagination,
+        )
+      : Promise.resolve([]);
+
     const [userExercises, commonExercises] = await Promise.all([
-      this.exercisesRepo.getByFuzzyNameAndUserId(
-        request.name,
-        request.userId,
-        pagination,
-      ),
+      userExercisesPromise,
 
       this.exercisesRepo.getCommonExercisesByFuzzyName(
         request.name,
