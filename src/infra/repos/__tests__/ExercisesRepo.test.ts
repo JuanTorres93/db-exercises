@@ -304,6 +304,31 @@ repos.forEach(({ name, repoClass }) => {
 
         expect(foundExercises).toEqual([]);
       });
+
+      it("can paginate results", async () => {
+        const exercisesToAdd = Array.from({ length: 15 }, (_, i) =>
+          createTestExercise({
+            id: `exercise-${i + 2}`,
+            name: `User Exercise ${i + 2}`,
+            userId: "user-1",
+          }),
+        );
+
+        for (const exercise of exercisesToAdd) {
+          await repo.save(exercise);
+        }
+
+        const foundExercises = await repo.getByFuzzyNameAndUserId(
+          "user exercise",
+          "user-1",
+          {
+            page: 2,
+            limit: 5,
+          },
+        );
+
+        expect(foundExercises.length).toBe(5);
+      });
     });
 
     describe("save", () => {

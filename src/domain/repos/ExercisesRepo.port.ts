@@ -15,7 +15,11 @@ export interface ExercisesRepo {
   getCommonExerciseByName(name: string): Promise<Exercise | null>;
 
   getByNameAndUserId(name: string, userId: string): Promise<Exercise | null>;
-  getByFuzzyNameAndUserId(name: string, userId: string): Promise<Exercise[]>;
+  getByFuzzyNameAndUserId(
+    name: string,
+    userId: string,
+    pagination?: PaginationParams,
+  ): Promise<Exercise[]>;
 
   save(exercise: Exercise): Promise<Exercise>;
 

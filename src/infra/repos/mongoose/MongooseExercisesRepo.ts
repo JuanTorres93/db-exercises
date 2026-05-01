@@ -61,13 +61,16 @@ export class MongooseExercisesRepo implements ExercisesRepo {
   async getByFuzzyNameAndUserId(
     name: string,
     userId: string,
+    pagination?: PaginationParams,
   ): Promise<Exercise[]> {
     const docs = await ExerciseMongo.find({
       userId,
       name: { $regex: escapeRegex(name), $options: "i" },
     }).lean();
 
-    return docs.map((doc) => toExercise(doc as ExerciseDTO));
+    const exercises = docs.map((doc) => toExercise(doc as ExerciseDTO));
+
+    return this.paginate(exercises, pagination);
   }
 
   async save(exercise: Exercise): Promise<Exercise> {

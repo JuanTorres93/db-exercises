@@ -69,16 +69,17 @@ export class MemoryExercisesRepo implements ExercisesRepo {
   async getByFuzzyNameAndUserId(
     name: string,
     userId: string,
+    pagination?: PaginationParams,
   ): Promise<Exercise[]> {
     const processedName = name.toLowerCase();
 
-    const exercises = Array.from(this.exercises.values());
-
-    return exercises.filter(
+    const exercises = Array.from(this.exercises.values()).filter(
       (exercise) =>
         (userId ? exercise.userId === userId : !exercise.userId) &&
         exercise.name.toLowerCase().includes(processedName),
     );
+
+    return this.paginate(exercises, pagination);
   }
 
   async save(exercise: Exercise): Promise<Exercise> {
