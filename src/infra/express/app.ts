@@ -4,6 +4,7 @@ import morgan from "morgan";
 
 import { handleKnownErrors } from "./common/handleKnownErrors";
 import { handleUnhandledErrors } from "./common/handleUnhandledErrors";
+import { apiKeyProtected } from "./middleware/apiKeyProtected";
 import exercisesRouter from "./routes/exercisesRoutes";
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(cors());
 
 if (process.env.NODE_ENV !== "test") app.use(morgan("short"));
 
+app.use(apiKeyProtected);
 app.use("/exercises", exercisesRouter);
 
 // IMPORTANT NOTE: These should be the last middlewares in the chain, after all routes and other middlewares have been defined.

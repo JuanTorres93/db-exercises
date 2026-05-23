@@ -5,6 +5,7 @@ import { MemoryExercisesRepo } from "@/infra/repos/memory/MemoryExercisesRepo";
 import { AppExercisesRepo } from "@/interface-adapters/repos/AppExercisesRepo";
 
 import { USER_ONE_ID } from "../../../../../tests/seeds/createSeedExercisesNoPersistence";
+import { requestWithAPIHeader } from "../../__tests__/requestWithAPIHeader";
 import app from "../../app";
 import {
   getExistingExercise,
@@ -12,6 +13,19 @@ import {
 } from "./setupExercisesRouteTests";
 
 const appExercisesRepo = AppExercisesRepo as MemoryExercisesRepo;
+
+describe("Exercises Endpoint", () => {
+  it("shoould return error if no API key header is provided", () => {
+    return request(app).get("/exercises").expect(401);
+  });
+
+  it("shoould return error if invalid API key is provided", () => {
+    return request(app)
+      .get("/exercises")
+      .set("x-api-key", "invalid_key")
+      .expect(403);
+  });
+});
 
 describe("POST /exercises", () => {
   setupExercisesRouteTests();
@@ -22,7 +36,7 @@ describe("POST /exercises", () => {
   };
 
   it("should return 201 status", async () => {
-    const response = await request(app)
+    const response = await requestWithAPIHeader(app)
       .post("/exercises")
       .send(newUserExerciseBody);
 
@@ -30,7 +44,7 @@ describe("POST /exercises", () => {
   });
 
   it("should return JSEND on success with new exercise", async () => {
-    const response = await request(app)
+    const response = await requestWithAPIHeader(app)
       .post("/exercises")
       .send(newUserExerciseBody);
 
@@ -43,7 +57,9 @@ describe("POST /exercises", () => {
   it("should persist new exercise in repo", async () => {
     const exercisesBefore = appExercisesRepo.getAllForTesting();
 
-    await request(app).post("/exercises").send(newUserExerciseBody);
+    await requestWithAPIHeader(app)
+      .post("/exercises")
+      .send(newUserExerciseBody);
 
     const exercisesAfter = appExercisesRepo.getAllForTesting();
 
@@ -63,7 +79,7 @@ describe("POST /exercises", () => {
     });
 
     it("should return 409 if an exercise with the same name already exists", async () => {
-      const response = await request(app)
+      const response = await requestWithAPIHeader(app)
         .post("/exercises")
         .send(duplicatedExerciseRequestBody);
 
@@ -71,7 +87,7 @@ describe("POST /exercises", () => {
     });
 
     it("should return JSEND fail if an exercise with the same name already exists", async () => {
-      const response = await request(app)
+      const response = await requestWithAPIHeader(app)
         .post("/exercises")
         .send(duplicatedExerciseRequestBody);
 

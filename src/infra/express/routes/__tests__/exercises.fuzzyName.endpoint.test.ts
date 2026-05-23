@@ -1,6 +1,7 @@
 import request from "supertest";
 
 import { USER_ONE_ID } from "../../../../../tests/seeds/createSeedExercisesNoPersistence";
+import { requestWithAPIHeader } from "../../__tests__/requestWithAPIHeader";
 import app from "../../app";
 import { setupExercisesRouteTests } from "./setupExercisesRouteTests";
 
@@ -8,7 +9,7 @@ describe("GET /exercises/:fuzzyName", () => {
   setupExercisesRouteTests();
 
   it("should return 200 status", async () => {
-    const response = await request(app)
+    const response = await requestWithAPIHeader(app)
       .get("/exercises/Exercise")
       .query({ userId: USER_ONE_ID });
 
@@ -16,7 +17,7 @@ describe("GET /exercises/:fuzzyName", () => {
   });
 
   it("should return JSEND on success with matching exercises", async () => {
-    const response = await request(app)
+    const response = await requestWithAPIHeader(app)
       .get("/exercises/Exercise")
       .query({ userId: USER_ONE_ID });
 
@@ -28,7 +29,7 @@ describe("GET /exercises/:fuzzyName", () => {
   });
 
   it("should return empty array when no exercises match", async () => {
-    const response = await request(app)
+    const response = await requestWithAPIHeader(app)
       .get("/exercises/NonExistentExerciseName")
       .query({ userId: USER_ONE_ID });
 
@@ -37,7 +38,7 @@ describe("GET /exercises/:fuzzyName", () => {
   });
 
   it("can paginate results", async () => {
-    const response = await request(app)
+    const response = await requestWithAPIHeader(app)
       .get("/exercises/Exercise")
       .query({ userId: USER_ONE_ID, page: 1, limit: 2 });
 

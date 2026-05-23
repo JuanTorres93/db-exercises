@@ -5,6 +5,7 @@ import { RenameExerciseForUserIdUsecaseRequest } from "@/application-layer/use-c
 import { AppExercisesRepo } from "@/interface-adapters/repos/AppExercisesRepo";
 
 import { USER_ONE_ID } from "../../../../../tests/seeds/createSeedExercisesNoPersistence";
+import { requestWithAPIHeader } from "../../__tests__/requestWithAPIHeader";
 import app from "../../app";
 import {
   getExistingExercise,
@@ -22,7 +23,7 @@ describe("PUT /exercises/:exerciseId", () => {
   it("should return 200 status", async () => {
     const existingExercise = await getExistingExercise();
 
-    const response = await request(app)
+    const response = await requestWithAPIHeader(app)
       .put(`/exercises/${existingExercise.id}`)
       .send(renameExerciseBody);
 
@@ -32,7 +33,7 @@ describe("PUT /exercises/:exerciseId", () => {
   it("should return JSEND on success with new exercise", async () => {
     const existingExercise = await getExistingExercise();
 
-    const response = await request(app)
+    const response = await requestWithAPIHeader(app)
       .put(`/exercises/${existingExercise.id}`)
       .send(renameExerciseBody);
 
@@ -53,7 +54,7 @@ describe("PUT /exercises/:exerciseId", () => {
   it("should save new name in repo", async () => {
     const existingExercise = await getExistingExercise();
 
-    await request(app)
+    await requestWithAPIHeader(app)
       .put(`/exercises/${existingExercise.id}`)
       .send(renameExerciseBody);
 
@@ -67,7 +68,7 @@ describe("PUT /exercises/:exerciseId", () => {
     it("should return 409 if an exercise with the same name already exists", async () => {
       const existingExercise = await getExistingExercise();
 
-      const response = await request(app)
+      const response = await requestWithAPIHeader(app)
         .put(`/exercises/${existingExercise.id}`)
         .send({
           ...renameExerciseBody,
@@ -80,7 +81,7 @@ describe("PUT /exercises/:exerciseId", () => {
     it("should return JSEND fail if an exercise with the same name already exists", async () => {
       const existingExercise = await getExistingExercise();
 
-      const response = await request(app)
+      const response = await requestWithAPIHeader(app)
         .put(`/exercises/${existingExercise.id}`)
         .send({
           ...renameExerciseBody,
@@ -98,7 +99,7 @@ describe("PUT /exercises/:exerciseId", () => {
     it("should return 404 if the exercise does not exist", async () => {
       const nonExistentExerciseId = "non-existent-id";
 
-      const response = await request(app)
+      const response = await requestWithAPIHeader(app)
         .put(`/exercises/${nonExistentExerciseId}`)
         .send(renameExerciseBody);
 
@@ -108,7 +109,7 @@ describe("PUT /exercises/:exerciseId", () => {
     it("should return JSEND fail if the exercise does not exist", async () => {
       const nonExistentExerciseId = "non-existent-id";
 
-      const response = await request(app)
+      const response = await requestWithAPIHeader(app)
         .put(`/exercises/${nonExistentExerciseId}`)
         .send(renameExerciseBody);
 
@@ -123,7 +124,7 @@ describe("PUT /exercises/:exerciseId", () => {
     it("should return 409 if a user tries to rename an exercise that does not belong to them", async () => {
       const existingExercise = await getExistingExercise();
 
-      const response = await request(app)
+      const response = await requestWithAPIHeader(app)
         .put(`/exercises/${existingExercise.id}`)
         .send({
           ...renameExerciseBody,
@@ -150,7 +151,7 @@ describe("DELETE /exercises/:exerciseId", () => {
   it("should return 200 status", async () => {
     const existingExercise = await getExistingExercise();
 
-    const response = await request(app)
+    const response = await requestWithAPIHeader(app)
       .delete(`/exercises/${existingExercise.id}`)
       .send(deleteExerciseBody);
 
@@ -160,7 +161,7 @@ describe("DELETE /exercises/:exerciseId", () => {
   it("should return JSEND success with the deleted exercise", async () => {
     const existingExercise = await getExistingExercise();
 
-    const response = await request(app)
+    const response = await requestWithAPIHeader(app)
       .delete(`/exercises/${existingExercise.id}`)
       .send(deleteExerciseBody);
 
@@ -173,7 +174,7 @@ describe("DELETE /exercises/:exerciseId", () => {
   it("should remove the exercise from the repo", async () => {
     const existingExercise = await getExistingExercise();
 
-    await request(app)
+    await requestWithAPIHeader(app)
       .delete(`/exercises/${existingExercise.id}`)
       .send(deleteExerciseBody);
 
@@ -183,7 +184,7 @@ describe("DELETE /exercises/:exerciseId", () => {
 
   describe("Errors", () => {
     it("should return 404 if the exercise does not exist", async () => {
-      const response = await request(app)
+      const response = await requestWithAPIHeader(app)
         .delete("/exercises/non-existent-id")
         .send(deleteExerciseBody);
 
@@ -191,7 +192,7 @@ describe("DELETE /exercises/:exerciseId", () => {
     });
 
     it("should return JSEND fail if the exercise does not exist", async () => {
-      const response = await request(app)
+      const response = await requestWithAPIHeader(app)
         .delete("/exercises/non-existent-id")
         .send(deleteExerciseBody);
 
@@ -206,7 +207,7 @@ describe("DELETE /exercises/:exerciseId", () => {
     it("should return 404 if the exercise does not belong to the user", async () => {
       const existingExercise = await getExistingExercise();
 
-      const response = await request(app)
+      const response = await requestWithAPIHeader(app)
         .delete(`/exercises/${existingExercise.id}`)
         .send({ userId: "other-user" });
 
@@ -216,7 +217,7 @@ describe("DELETE /exercises/:exerciseId", () => {
     it("should return JSEND fail if the exercise does not belong to the user", async () => {
       const existingExercise = await getExistingExercise();
 
-      const response = await request(app)
+      const response = await requestWithAPIHeader(app)
         .delete(`/exercises/${existingExercise.id}`)
         .send({ userId: "other-user" });
 
