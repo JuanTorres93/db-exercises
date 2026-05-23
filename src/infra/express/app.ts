@@ -12,6 +12,10 @@ app.use(express.json());
 
 app.use(cors());
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 if (process.env.NODE_ENV !== "test") app.use(morgan("short"));
 
 app.use(apiKeyProtected);
